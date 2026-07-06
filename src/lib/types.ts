@@ -44,6 +44,9 @@ export interface ImpostorRoomSettings {
 export interface ImpostorRoom {
   id: string;
   joinCode: string;
+  roomName: string;
+  maxPlayers: number;
+  isPublic: boolean;
   status: ImpostorRoomStatus;
   phase: ImpostorRoomPhase;
   hostPlayerToken: string;

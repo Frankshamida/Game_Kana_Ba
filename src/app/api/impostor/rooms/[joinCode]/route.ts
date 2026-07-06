@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { mapPlayerRow, mapRoomRow, type ImpostorRoomPlayerRow, type ImpostorRoomRow } from "@/lib/impostor-room";
 import { getServiceSupabase } from "@/lib/supabase-server";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET(
   _request: NextRequest,
   context: { params: Promise<{ joinCode: string }> },
@@ -35,8 +38,17 @@ export async function GET(
     return NextResponse.json({ error: playersResult.error.message }, { status: 500 });
   }
 
-  return NextResponse.json({
-    room: mapRoomRow(roomResult.data),
-    players: (playersResult.data ?? []).map(mapPlayerRow),
-  });
+  return NextResponse.json(
+    {
+      room: mapRoomRow(roomResult.data),
+      players: (playersResult.data ?? []).map(mapPlayerRow),
+    },
+    {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
+    },
+  );
 }

@@ -148,21 +148,31 @@ export default function SpiritualTalkSetupPage() {
             </p>
           )}
 
-          <Button
-            size="xl"
-            className="mt-6 w-full"
-            disabled={loading || Boolean(validationError)}
-            onClick={startSession}
-          >
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Starting
-                Session...
-              </>
-            ) : (
-              "Start Spiritual Talk"
-            )}
-          </Button>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <Button
+              size="xl"
+              className="sm:flex-1"
+              disabled={loading || Boolean(validationError)}
+              onClick={startSession}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Starting
+                  Session...
+                </>
+              ) : (
+                "Start Spiritual Talk"
+              )}
+            </Button>
+            <Button
+              type="button"
+              size="xl"
+              variant="ghost"
+              onClick={() => router.push("/")}
+            >
+              Back Home
+            </Button>
+          </div>
         </Card>
       </div>
     </main>

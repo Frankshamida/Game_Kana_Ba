@@ -42,31 +42,39 @@ export async function POST(request: NextRequest) {
     }
 
     const players = playersResult.data ?? [];
-    const voteCount = new Map<string, number>();
-    for (const player of players) {
-      if (!player.vote_target_player_id) continue;
-      voteCount.set(
-        player.vote_target_player_id,
-        (voteCount.get(player.vote_target_player_id) ?? 0) + 1,
-      );
-    }
-
-    const topVotes = Array.from(voteCount.entries()).sort((a, b) => b[1] - a[1]);
-    const maxVotes = topVotes[0]?.[1] ?? 0;
-    const topPlayerIds = topVotes.filter(([, count]) => count === maxVotes).map(([id]) => id);
-    const hasMajority = maxVotes > Math.floor(players.length / 2);
-    const majorityHitImpostor = hasMajority && players.some(
-      (player) => topPlayerIds.includes(player.id) && player.is_impostor,
-    );
+    const impostors = players.filter((player) => Boolean(player.is_impostor));
+    const impostorIds = new Set(impostors.map((player) => player.id));
 
     if (!roomResult.data.round_awarded) {
+      const pendingScores = new Map<string, number>();
+
       for (const player of players) {
-        const shouldAddPoint = majorityHitImpostor ? !player.is_impostor : Boolean(player.is_impostor);
-        if (!shouldAddPoint) continue;
+        pendingScores.set(player.id, player.score);
+      }
+
+      for (const player of players) {
+        if (player.is_impostor) continue;
+
+        if (player.vote_target_player_id && impostorIds.has(player.vote_target_player_id)) {
+          pendingScores.set(player.id, (pendingScores.get(player.id) ?? player.score) + 2);
+          continue;
+        }
+
+        for (const impostor of impostors) {
+          pendingScores.set(
+            impostor.id,
+            (pendingScores.get(impostor.id) ?? impostor.score) + 2,
+          );
+        }
+      }
+
+      for (const player of players) {
+        const nextScore = pendingScores.get(player.id) ?? player.score;
+        if (nextScore === player.score) continue;
 
         const updateScoreResult = await supabase
           .from("impostor_room_players")
-          .update({ score: player.score + 1 })
+          .update({ score: nextScore })
           .eq("id", player.id);
 
         if (updateScoreResult.error) {
@@ -99,7 +107,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      majorityHitImpostor,
+      scoringMode: "individual_exact_guess",
       room: roomUpdate.data,
     });
   } catch (error) {

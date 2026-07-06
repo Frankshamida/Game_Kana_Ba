@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { CheckCircle2, HeartHandshake, RotateCcw, XCircle } from "lucide-react";
 import { AnimatedBackground } from "@/components/game/animated-background";
+import { ExitGameModal } from "@/components/game/exit-game-modal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -20,6 +21,7 @@ export default function SpiritualTalkPlayPage() {
   const [session, setSession] = useState<SpiritualTalkSession | null>(null);
   const [loadingPrompt, setLoadingPrompt] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [exitTarget, setExitTarget] = useState<string | null>(null);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
@@ -157,6 +159,15 @@ export default function SpiritualTalkPlayPage() {
     }
   };
 
+  const requestExit = (path: string) => {
+    setExitTarget(path);
+  };
+
+  const confirmExit = () => {
+    if (!exitTarget) return;
+    router.push(exitTarget);
+  };
+
   if (!session || !currentPlayer) {
     return (
       <main className="grid min-h-screen place-items-center px-4">
@@ -252,11 +263,11 @@ export default function SpiritualTalkPlayPage() {
             <Button
               size="lg"
               variant="ghost"
-              onClick={() => router.push("/game/spiritual-talk")}
+              onClick={() => requestExit("/game/spiritual-talk")}
             >
               <RotateCcw className="mr-2 h-5 w-5" /> Back to Setup
             </Button>
-            <Button size="lg" variant="ghost" onClick={() => router.push("/")}>
+            <Button size="lg" variant="ghost" onClick={() => requestExit("/")}>
               Back to Home
             </Button>
           </div>
@@ -306,6 +317,15 @@ export default function SpiritualTalkPlayPage() {
           </ul>
         </Card>
       </div>
+
+      <ExitGameModal
+        open={Boolean(exitTarget)}
+        title="Leave Spiritual Talk?"
+        description="Leaving now may discard the current reflection progress."
+        confirmLabel="Leave Game"
+        onConfirm={confirmExit}
+        onCancel={() => setExitTarget(null)}
+      />
     </main>
   );
 }

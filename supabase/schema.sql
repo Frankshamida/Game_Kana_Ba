@@ -21,6 +21,9 @@ create table if not exists public.impostor_rooms (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
   join_code text not null unique,
+  room_name text not null default 'Impostor Room',
+  max_players int not null default 20 check (max_players between 3 and 20),
+  is_public boolean not null default true,
   status text not null default 'waiting' check (status in ('waiting', 'started', 'finished')),
   phase text not null default 'lobby' check (phase in ('lobby', 'role_reveal', 'voting', 'results')),
   host_player_token text not null,
@@ -49,6 +52,28 @@ create table if not exists public.impostor_room_players (
 
 alter table if exists public.impostor_room_players
   add column if not exists ready_for_next_round boolean not null default false;
+
+alter table if exists public.impostor_rooms
+  add column if not exists room_name text not null default 'Impostor Room';
+
+alter table if exists public.impostor_rooms
+  add column if not exists max_players int not null default 20;
+
+alter table if exists public.impostor_rooms
+  add column if not exists is_public boolean not null default true;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'impostor_rooms_max_players_check'
+  ) then
+    alter table public.impostor_rooms
+      add constraint impostor_rooms_max_players_check
+      check (max_players between 3 and 20);
+  end if;
+end $$;
 
 create index if not exists idx_players_game_id on public.players(game_id);
 create index if not exists idx_games_created_at on public.games(created_at desc);

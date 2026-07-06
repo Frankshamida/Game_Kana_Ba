@@ -13,16 +13,16 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const playerName = typeof body?.playerName === "string" ? body.playerName.trim() : "";
     const joinCode = typeof body?.joinCode === "string" ? body.joinCode.trim().toUpperCase() : "";
+    const roomId = typeof body?.roomId === "string" ? body.roomId.trim() : "";
 
-    if (!playerName || !joinCode) {
-      return NextResponse.json({ error: "Player name and join code are required." }, { status: 400 });
+    if (!playerName || (!joinCode && !roomId)) {
+      return NextResponse.json({ error: "Player name and room code are required." }, { status: 400 });
     }
 
-    const roomResult = await supabase
-      .from("impostor_rooms")
-      .select("*")
-      .eq("join_code", joinCode)
-      .single<ImpostorRoomRow>();
+    const roomQuery = supabase.from("impostor_rooms").select("*");
+    const roomResult = roomId
+      ? await roomQuery.eq("id", roomId).single<ImpostorRoomRow>()
+      : await roomQuery.eq("join_code", joinCode).single<ImpostorRoomRow>();
 
     if (roomResult.error || !roomResult.data) {
       return NextResponse.json({ error: "Room code not found." }, { status: 404 });
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     }
 
     const existingPlayers = playersResult.data ?? [];
-    if (existingPlayers.length >= 20) {
+    if (existingPlayers.length >= room.maxPlayers) {
       return NextResponse.json({ error: "This room is already full." }, { status: 400 });
     }
 

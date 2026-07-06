@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Crown, ShieldAlert, Sparkles, Users } from "lucide-react";
 import { AnimatedBackground } from "@/components/game/animated-background";
 import { DiscussionTimer } from "@/components/game/discussion-timer";
+import { ExitGameModal } from "@/components/game/exit-game-modal";
 import { RevealCard } from "@/components/game/reveal-card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -38,6 +39,7 @@ export default function ImpostorPlayPage() {
   const [roundScored, setRoundScored] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
   const [resetError, setResetError] = useState<string | null>(null);
+  const [exitTarget, setExitTarget] = useState<string | null>(null);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
@@ -306,10 +308,29 @@ export default function ImpostorPlayPage() {
     }
   };
 
+  const requestExit = (path: string) => {
+    setExitTarget(path);
+  };
+
+  const confirmExit = () => {
+    if (!exitTarget) return;
+    router.push(exitTarget);
+  };
+
   return (
     <main className="relative min-h-screen overflow-hidden px-4 py-8">
       <AnimatedBackground />
       <div className="container mx-auto max-w-3xl">
+        <div className="mb-4 flex justify-start">
+          <Button
+            size="default"
+            variant="ghost"
+            onClick={() => requestExit("/")}
+          >
+            Back to Home
+          </Button>
+        </div>
+
         {phase === "reveal" && (
           <Card>
             {!showRevealCard ? (
@@ -382,7 +403,7 @@ export default function ImpostorPlayPage() {
               <Button
                 size="lg"
                 variant="ghost"
-                onClick={() => router.push("/")}
+                onClick={() => requestExit("/")}
               >
                 Back to Home
               </Button>
@@ -591,7 +612,7 @@ export default function ImpostorPlayPage() {
               <Button
                 size="lg"
                 variant="ghost"
-                onClick={() => router.push("/")}
+                onClick={() => requestExit("/")}
                 className="sm:min-w-40"
               >
                 Back to Home
@@ -600,6 +621,15 @@ export default function ImpostorPlayPage() {
           </Card>
         )}
       </div>
+
+      <ExitGameModal
+        open={Boolean(exitTarget)}
+        title="Leave this Impostor game?"
+        description="If you exit now, your current round progress may be lost."
+        confirmLabel="Leave Game"
+        onConfirm={confirmExit}
+        onCancel={() => setExitTarget(null)}
+      />
     </main>
   );
 }

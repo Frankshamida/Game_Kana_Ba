@@ -15,17 +15,27 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const playerName = typeof body?.playerName === "string" ? body.playerName.trim() : "";
+    const roomName = typeof body?.roomName === "string" ? body.roomName.trim() : "";
+    const isPublic = typeof body?.isPublic === "boolean" ? body.isPublic : true;
     const hideHint = Boolean(body?.hideHint);
     const impostorCount =
       typeof body?.impostorCount === "number" && Number.isFinite(body.impostorCount)
         ? Math.max(1, Math.min(3, Math.trunc(body.impostorCount)))
         : 1;
+    const maxPlayers =
+      typeof body?.maxPlayers === "number" && Number.isFinite(body.maxPlayers)
+        ? Math.max(3, Math.min(20, Math.trunc(body.maxPlayers)))
+        : 10;
     const hintDifficulty = HINT_DIFFICULTIES.includes(body?.hintDifficulty)
       ? (body.hintDifficulty as HintDifficulty)
       : "normal";
 
     if (!playerName) {
       return NextResponse.json({ error: "Host player name is required." }, { status: 400 });
+    }
+
+    if (!roomName) {
+      return NextResponse.json({ error: "Room name is required." }, { status: 400 });
     }
 
     for (let attempt = 0; attempt < 8; attempt += 1) {
@@ -36,6 +46,9 @@ export async function POST(request: NextRequest) {
         .from("impostor_rooms")
         .insert({
           join_code: joinCode,
+          room_name: roomName,
+          max_players: maxPlayers,
+          is_public: isPublic,
           status: "waiting",
           phase: "lobby",
           host_player_token: hostPlayerToken,
