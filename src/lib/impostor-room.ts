@@ -10,6 +10,9 @@ export interface ImpostorRoomRow {
   id: string;
   created_at: string;
   join_code: string;
+  room_name?: string | null;
+  max_players?: number | null;
+  is_public?: boolean | null;
   status: "waiting" | "started" | "finished";
   phase: "lobby" | "role_reveal" | "voting" | "results";
   host_player_token: string;
@@ -42,9 +45,17 @@ export function createJoinCode() {
 }
 
 export function mapRoomRow(row: ImpostorRoomRow): ImpostorRoom {
+  const safeMaxPlayers =
+    typeof row.max_players === "number" && Number.isFinite(row.max_players)
+      ? Math.max(3, Math.min(20, Math.trunc(row.max_players)))
+      : 20;
+
   return {
     id: row.id,
     joinCode: row.join_code,
+    roomName: (row.room_name ?? "Impostor Room").trim() || "Impostor Room",
+    maxPlayers: safeMaxPlayers,
+    isPublic: row.is_public ?? true,
     status: row.status,
     phase: row.phase,
     hostPlayerToken: row.host_player_token,

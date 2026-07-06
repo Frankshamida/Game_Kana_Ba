@@ -43,6 +43,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Player not found in room." }, { status: 404 });
     }
 
+    if (playerResult.data.id === targetPlayerId) {
+      return NextResponse.json({ error: "You cannot vote for yourself." }, { status: 400 });
+    }
+
     const targetResult = await supabase
       .from("impostor_room_players")
       .select("id")

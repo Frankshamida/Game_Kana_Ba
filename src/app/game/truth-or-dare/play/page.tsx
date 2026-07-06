@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { CheckCircle2, RotateCcw, XCircle } from "lucide-react";
 import { AnimatedBackground } from "@/components/game/animated-background";
+import { ExitGameModal } from "@/components/game/exit-game-modal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -20,6 +21,7 @@ export default function TruthOrDarePlayPage() {
   const [game, setGame] = useState<TruthOrDareGameSession | null>(null);
   const [loadingChallenge, setLoadingChallenge] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [exitTarget, setExitTarget] = useState<string | null>(null);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
@@ -157,6 +159,15 @@ export default function TruthOrDarePlayPage() {
     }
   };
 
+  const requestExit = (path: string) => {
+    setExitTarget(path);
+  };
+
+  const confirmExit = () => {
+    if (!exitTarget) return;
+    router.push(exitTarget);
+  };
+
   if (!game || !currentPlayer) {
     return (
       <main className="grid min-h-screen place-items-center px-4">
@@ -249,11 +260,11 @@ export default function TruthOrDarePlayPage() {
             <Button
               size="lg"
               variant="ghost"
-              onClick={() => router.push("/game/truth-or-dare")}
+              onClick={() => requestExit("/game/truth-or-dare")}
             >
               <RotateCcw className="mr-2 h-5 w-5" /> Back to Setup
             </Button>
-            <Button size="lg" variant="ghost" onClick={() => router.push("/")}>
+            <Button size="lg" variant="ghost" onClick={() => requestExit("/")}>
               Back to Home
             </Button>
           </div>
@@ -303,6 +314,15 @@ export default function TruthOrDarePlayPage() {
           </ul>
         </Card>
       </div>
+
+      <ExitGameModal
+        open={Boolean(exitTarget)}
+        title="Leave Truth or Dare?"
+        description="Leaving now may discard the current challenge progress."
+        confirmLabel="Leave Game"
+        onConfirm={confirmExit}
+        onCancel={() => setExitTarget(null)}
+      />
     </main>
   );
 }

@@ -16,7 +16,7 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
             className="font-display text-5xl font-extrabold tracking-tight sm:text-6xl"
           >
-            Welcome to Party Games!
+            GatherUp
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -24,7 +24,7 @@ export default function HomePage() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground"
           >
-            Choose a game and start playing with your friends.
+            Play. Laugh. Connect.
           </motion.p>
         </section>
 

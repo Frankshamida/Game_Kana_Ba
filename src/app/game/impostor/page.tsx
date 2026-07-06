@@ -1,20 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { AnimatedBackground } from "@/components/game/animated-background";
 import { PlayerListEditor } from "@/components/game/player-list-editor";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  CreateImpostorRoomResponse,
-  GameStartResponse,
-  ImpostorGameSession,
-  JoinImpostorRoomResponse,
-  RemoteImpostorSession,
-} from "@/lib/types";
+import { GameStartResponse, ImpostorGameSession } from "@/lib/types";
 
 function validatePlayers(players: string[]): string | null {
   const trimmed = players.map((name) => name.trim());
@@ -34,41 +27,21 @@ function validatePlayers(players: string[]): string | null {
 export default function ImpostorSetupPage() {
   const router = useRouter();
   const [players, setPlayers] = useState(["", "", ""]);
-  const [darkMode, setDarkMode] = useState(false);
   const [hideHint, setHideHint] = useState(false);
   const [impostorCount, setImpostorCount] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [remoteLoading, setRemoteLoading] = useState(false);
-  const [remoteHostName, setRemoteHostName] = useState("");
-  const [remoteJoinName, setRemoteJoinName] = useState("");
-  const [remoteJoinCode, setRemoteJoinCode] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [remoteError, setRemoteError] = useState<string | null>(null);
 
   const validationError = useMemo(() => validatePlayers(players), [players]);
   const maxImpostors = Math.min(3, Math.max(1, players.length - 1));
+  const effectiveImpostorCount = Math.min(impostorCount, maxImpostors);
 
-  useEffect(() => {
-    setImpostorCount((current) => Math.min(current, maxImpostors));
-  }, [maxImpostors]);
-
-  useEffect(() => {
-    const isDark = document.documentElement.classList.contains("dark");
-    setDarkMode(isDark);
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", darkMode);
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
-  }, [darkMode]);
-
-  const saveRemoteSession = (roomCode: string, playerToken: string) => {
-    const session: RemoteImpostorSession = {
-      roomCode,
-      playerToken,
-    };
-
-    sessionStorage.setItem("remoteImpostorSession", JSON.stringify(session));
+  const handlePlayersChange = (nextPlayers: string[]) => {
+    setPlayers(nextPlayers);
+    setImpostorCount((current) => {
+      const nextMaxImpostors = Math.min(3, Math.max(1, nextPlayers.length - 1));
+      return Math.min(current, nextMaxImpostors);
+    });
   };
 
   const startGame = async () => {
@@ -127,97 +100,6 @@ export default function ImpostorSetupPage() {
     }
   };
 
-  const createRemoteGame = async () => {
-    const playerName = remoteHostName.trim();
-    if (!playerName) {
-      setRemoteError("Host name is required.");
-      return;
-    }
-
-    setRemoteLoading(true);
-    setRemoteError(null);
-
-    try {
-      const response = await fetch("/api/impostor/rooms/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          playerName,
-          hideHint,
-          impostorCount,
-          hintDifficulty: "normal",
-        }),
-      });
-
-      const body = (await response.json().catch(() => null)) as
-        | CreateImpostorRoomResponse
-        | { error?: string }
-        | null;
-
-      if (!response.ok || !body || !("room" in body) || !("player" in body)) {
-        throw new Error(
-          body && "error" in body
-            ? (body.error ?? "Failed to create room.")
-            : "Failed to create room.",
-        );
-      }
-
-      saveRemoteSession(body.room.joinCode, body.player.playerToken);
-      router.push(`/game/impostor/lobby/${body.room.joinCode}`);
-    } catch (createError) {
-      setRemoteError(
-        createError instanceof Error
-          ? createError.message
-          : "Failed to create room.",
-      );
-    } finally {
-      setRemoteLoading(false);
-    }
-  };
-
-  const joinRemoteGame = async () => {
-    const playerName = remoteJoinName.trim();
-    const joinCode = remoteJoinCode.trim().toUpperCase();
-
-    if (!playerName || !joinCode) {
-      setRemoteError("Player name and join code are required.");
-      return;
-    }
-
-    setRemoteLoading(true);
-    setRemoteError(null);
-
-    try {
-      const response = await fetch("/api/impostor/rooms/join", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ playerName, joinCode }),
-      });
-
-      const body = (await response.json().catch(() => null)) as
-        | JoinImpostorRoomResponse
-        | { error?: string }
-        | null;
-
-      if (!response.ok || !body || !("room" in body) || !("player" in body)) {
-        throw new Error(
-          body && "error" in body
-            ? (body.error ?? "Failed to join room.")
-            : "Failed to join room.",
-        );
-      }
-
-      saveRemoteSession(body.room.joinCode, body.player.playerToken);
-      router.push(`/game/impostor/lobby/${body.room.joinCode}`);
-    } catch (joinError) {
-      setRemoteError(
-        joinError instanceof Error ? joinError.message : "Failed to join room.",
-      );
-    } finally {
-      setRemoteLoading(false);
-    }
-  };
-
   return (
     <main className="relative min-h-screen overflow-hidden px-4 py-8">
       <AnimatedBackground />
@@ -230,116 +112,20 @@ export default function ImpostorSetupPage() {
             Add 3 to 20 unique player names, then start the game.
           </p>
 
-          <section
-            id="create-game"
-            className="mt-6 rounded-3xl border border-cyan-200/70 bg-cyan-50/70 p-5 dark:border-cyan-900/50 dark:bg-cyan-950/20"
-          >
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-700 dark:text-cyan-300">
-              Create Game
-            </p>
-            <h2 className="mt-2 text-2xl font-extrabold text-slate-900 dark:text-slate-50">
-              Host a room for friends on their phones
-            </h2>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Enter your name, create a code, then wait in the lobby until you
-              start the match.
-            </p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto]">
-              <Input
-                value={remoteHostName}
-                onChange={(event) => setRemoteHostName(event.target.value)}
-                placeholder="Host name"
-              />
-              <Button
-                type="button"
-                size="xl"
-                onClick={createRemoteGame}
-                disabled={remoteLoading}
-              >
-                {remoteLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />{" "}
-                    Creating...
-                  </>
-                ) : (
-                  "Create Game"
-                )}
-              </Button>
-            </div>
-          </section>
-
-          <section
-            id="join-game"
-            className="mt-4 rounded-3xl border border-emerald-200/70 bg-emerald-50/70 p-5 dark:border-emerald-900/50 dark:bg-emerald-950/20"
-          >
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-emerald-700 dark:text-emerald-300">
-              Join A Game
-            </p>
-            <h2 className="mt-2 text-2xl font-extrabold text-slate-900 dark:text-slate-50">
-              Enter a code and wait for the host
-            </h2>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Join from your phone, then stay in the lobby until the host starts
-              the game.
-            </p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <Input
-                value={remoteJoinName}
-                onChange={(event) => setRemoteJoinName(event.target.value)}
-                placeholder="Your name"
-              />
-              <Input
-                value={remoteJoinCode}
-                onChange={(event) =>
-                  setRemoteJoinCode(event.target.value.toUpperCase())
-                }
-                placeholder="Room code"
-                maxLength={6}
-              />
-            </div>
-            <Button
-              type="button"
-              size="xl"
-              className="mt-4 w-full"
-              onClick={joinRemoteGame}
-              disabled={remoteLoading}
-            >
-              {remoteLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Joining...
-                </>
-              ) : (
-                "Join A Game"
-              )}
-            </Button>
-          </section>
-
-          {(remoteError || error || validationError) && (
-            <p className="mt-4 rounded-xl bg-red-100 px-3 py-2 text-sm font-medium text-red-800">
-              {remoteError || error || validationError}
+          {(error || validationError) && (
+            <p className="mt-4 rounded-xl bg-red-100 px-3 py-2 text-sm font-medium text-red-800 dark:bg-red-950/55 dark:text-red-200">
+              {error || validationError}
             </p>
           )}
 
           <div className="mt-6">
-            <PlayerListEditor players={players} onChange={setPlayers} />
+            <PlayerListEditor
+              players={players}
+              onChange={handlePlayersChange}
+            />
           </div>
 
-          <div className="mt-5 rounded-2xl bg-white/60 p-4">
-            <label className="flex cursor-pointer items-center gap-3 text-sm font-semibold">
-              <input
-                type="checkbox"
-                checked={darkMode}
-                onChange={(e) => setDarkMode(e.target.checked)}
-                className="h-4 w-4 accent-emerald-600"
-              />
-              Dark mode
-            </label>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Switch the game UI to a darker theme.
-            </p>
-          </div>
-
-          <div className="mt-4 rounded-2xl bg-white/60 p-4">
+          <div className="mt-5 rounded-2xl border border-white/70 bg-white/60 p-4 dark:border-slate-700/80 dark:bg-slate-900/70">
             <label className="flex cursor-pointer items-center gap-3 text-sm font-semibold">
               <input
                 type="checkbox"
@@ -354,12 +140,12 @@ export default function ImpostorSetupPage() {
             </p>
           </div>
 
-          <div className="mt-4 rounded-2xl bg-white/60 p-4">
+          <div className="mt-4 rounded-2xl border border-white/70 bg-white/60 p-4 dark:border-slate-700/80 dark:bg-slate-900/70">
             <p className="text-sm font-semibold">Number of impostors</p>
             <div className="mt-3 flex gap-2">
               {[1, 2, 3].map((count) => {
                 const disabled = count > maxImpostors;
-                const active = count === impostorCount;
+                const active = count === effectiveImpostorCount;
 
                 return (
                   <Button
@@ -368,7 +154,9 @@ export default function ImpostorSetupPage() {
                     size="default"
                     variant={active ? "default" : "secondary"}
                     disabled={disabled}
-                    onClick={() => setImpostorCount(count)}
+                    onClick={() =>
+                      setImpostorCount(Math.min(count, maxImpostors))
+                    }
                   >
                     {count}
                   </Button>
@@ -380,21 +168,31 @@ export default function ImpostorSetupPage() {
             </p>
           </div>
 
-          <Button
-            size="xl"
-            className="mt-6 w-full"
-            disabled={loading || Boolean(validationError)}
-            onClick={startGame}
-          >
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Starting
-                Game...
-              </>
-            ) : (
-              "Start Game"
-            )}
-          </Button>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <Button
+              size="xl"
+              className="sm:flex-1"
+              disabled={loading || Boolean(validationError)}
+              onClick={startGame}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Starting
+                  Game...
+                </>
+              ) : (
+                "Start Game"
+              )}
+            </Button>
+            <Button
+              type="button"
+              size="xl"
+              variant="ghost"
+              onClick={() => router.push("/")}
+            >
+              Back Home
+            </Button>
+          </div>
         </Card>
       </div>
     </main>

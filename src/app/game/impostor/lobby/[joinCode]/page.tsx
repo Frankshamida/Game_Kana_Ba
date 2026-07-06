@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Copy, Loader2, Radio, Users } from "lucide-react";
+import { Check, Copy, Loader2, Radio, Users } from "lucide-react";
 import { AnimatedBackground } from "@/components/game/animated-background";
+import { ExitGameModal } from "@/components/game/exit-game-modal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -25,15 +26,51 @@ export default function ImpostorLobbyPage() {
   const joinCode = String(params?.joinCode ?? "").toUpperCase();
   const [room, setRoom] = useState<ImpostorRoom | null>(null);
   const [players, setPlayers] = useState<ImpostorRoomPlayer[]>([]);
-  const [playerToken, setPlayerToken] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [starting, setStarting] = useState(false);
+  const [readyLoading, setReadyLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [showExitModal, setShowExitModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const playerToken = useMemo(() => {
+    if (typeof window === "undefined") return "";
+
+    const raw = sessionStorage.getItem("remoteImpostorSession");
+    if (!raw) return "";
+
+    try {
+      const parsed = JSON.parse(raw) as RemoteImpostorSession;
+      if (!parsed.playerToken || parsed.roomCode.toUpperCase() !== joinCode) {
+        return "";
+      }
+
+      return parsed.playerToken;
+    } catch {
+      return "";
+    }
+  }, [joinCode]);
 
   const currentPlayer = useMemo(
     () => players.find((player) => player.playerToken === playerToken) ?? null,
     [playerToken, players],
   );
+
+  const exitDescription = useMemo(() => {
+    const remainingPlayers = players.filter(
+      (player) => player.playerToken !== playerToken,
+    );
+
+    if (remainingPlayers.length === 0) {
+      return "If you leave now, the room will be deleted automatically because no players will remain.";
+    }
+
+    if (currentPlayer?.isHost) {
+      return `If you leave now, ${remainingPlayers[0].playerName} will become the new host.`;
+    }
+
+    return "If you leave now, the room will continue for the remaining players.";
+  }, [currentPlayer?.isHost, playerToken, players]);
 
   const isHost = currentPlayer?.isHost ?? false;
   const readyCount = players.filter(
@@ -58,24 +95,10 @@ export default function ImpostorLobbyPage() {
   };
 
   useEffect(() => {
-    const raw = sessionStorage.getItem("remoteImpostorSession");
-    if (!raw) {
-      router.replace("/game/impostor");
-      return;
-    }
-
-    try {
-      const parsed = JSON.parse(raw) as RemoteImpostorSession;
-      if (!parsed.playerToken || parsed.roomCode.toUpperCase() !== joinCode) {
-        router.replace("/game/impostor");
-        return;
-      }
-
-      setPlayerToken(parsed.playerToken);
-    } catch {
+    if (!playerToken) {
       router.replace("/game/impostor");
     }
-  }, [joinCode, router]);
+  }, [playerToken, router]);
 
   useEffect(() => {
     if (!playerToken) return;
@@ -170,6 +193,7 @@ export default function ImpostorLobbyPage() {
       const response = await fetch("/api/impostor/rooms/start", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        cache: "no-store",
         body: JSON.stringify({ joinCode, playerToken }),
       });
 
@@ -181,6 +205,7 @@ export default function ImpostorLobbyPage() {
         throw new Error(body.error ?? "Failed to start room.");
       }
 
+      await refreshRoom();
       router.replace(`/game/impostor/remote/${joinCode}`);
     } catch (startError) {
       setError(
@@ -196,8 +221,63 @@ export default function ImpostorLobbyPage() {
   const copyCode = async () => {
     try {
       await navigator.clipboard.writeText(joinCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
     } catch {
       // Ignore clipboard failures.
+    }
+  };
+
+  const setReadyForNextRound = async (ready: boolean) => {
+    setReadyLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/impostor/rooms/ready", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+        body: JSON.stringify({ joinCode, playerToken, ready }),
+      });
+
+      const body = await response
+        .json()
+        .catch(() => ({ error: "Failed to update ready state." }));
+
+      if (!response.ok) {
+        throw new Error(body.error ?? "Failed to update ready state.");
+      }
+
+      await refreshRoom();
+    } catch (readyError) {
+      setError(
+        readyError instanceof Error
+          ? readyError.message
+          : "Failed to update ready state.",
+      );
+    } finally {
+      setReadyLoading(false);
+    }
+  };
+
+  const leaveRoomAndNavigate = async (path: string) => {
+    if (!playerToken) {
+      router.push(path);
+      return;
+    }
+
+    try {
+      await fetch("/api/impostor/rooms/leave", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+        body: JSON.stringify({ joinCode, playerToken }),
+      });
+    } catch {
+      // Allow navigation even if leave request fails.
+    } finally {
+      sessionStorage.removeItem("remoteImpostorSession");
+      router.push(path);
     }
   };
 
@@ -212,15 +292,37 @@ export default function ImpostorLobbyPage() {
                 Remote Lobby
               </p>
               <h1 className="font-display text-4xl font-extrabold">
-                Join Code {joinCode}
+                {room?.roomName ?? "Impostor Room"}
               </h1>
+              {room?.isPublic ? (
+                <p className="mt-2 inline-flex items-center rounded-full border border-emerald-300/70 bg-emerald-100/80 px-3 py-1 text-sm font-bold text-emerald-900 shadow-sm dark:border-emerald-800/70 dark:bg-emerald-950/45 dark:text-emerald-100">
+                  Public Room
+                </p>
+              ) : (
+                <p className="mt-2 inline-flex items-center rounded-full border border-cyan-300/70 bg-cyan-100/80 px-4 py-1 text-lg font-black tracking-[0.25em] text-cyan-900 shadow-sm dark:border-cyan-800/70 dark:bg-cyan-950/45 dark:text-cyan-100">
+                  {joinCode}
+                </p>
+              )}
               <p className="mt-2 text-muted-foreground">
                 Invite friends, then wait for the host to start the game.
               </p>
+              <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                Players: {players.length}/{room?.maxPlayers ?? 20}
+              </p>
             </div>
-            <Button type="button" variant="secondary" onClick={copyCode}>
-              <Copy className="mr-2 h-4 w-4" /> Copy Code
-            </Button>
+            {!room?.isPublic && (
+              <Button type="button" variant="secondary" onClick={copyCode}>
+                {copied ? (
+                  <>
+                    <Check className="mr-2 h-4 w-4" /> Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="mr-2 h-4 w-4" /> Copy Code
+                  </>
+                )}
+              </Button>
+            )}
           </div>
 
           {loading ? (
@@ -255,11 +357,24 @@ export default function ImpostorLobbyPage() {
                       className="flex items-center justify-between rounded-xl border border-white/75 bg-white/80 px-3 py-2 text-sm font-semibold text-slate-900 dark:border-slate-700/80 dark:bg-slate-950/65 dark:text-slate-100"
                     >
                       <span>{player.playerName}</span>
-                      {player.isHost && (
-                        <span className="rounded-md bg-sky-100 px-2 py-1 text-xs font-bold text-sky-800 dark:bg-sky-950/60 dark:text-sky-200">
-                          Host
-                        </span>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {room?.status === "finished" && (
+                          <span
+                            className={`rounded-md px-2 py-1 text-xs font-bold ${
+                              player.readyForNextRound
+                                ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-200"
+                                : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                            }`}
+                          >
+                            {player.readyForNextRound ? "Ready" : "Not Ready"}
+                          </span>
+                        )}
+                        {player.isHost && (
+                          <span className="rounded-md bg-sky-100 px-2 py-1 text-xs font-bold text-sky-800 dark:bg-sky-950/60 dark:text-sky-200">
+                            Host
+                          </span>
+                        )}
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -279,7 +394,7 @@ export default function ImpostorLobbyPage() {
                     ? allReady
                       ? "Everyone is ready. The host can start the next round."
                       : `The game cannot continue yet. ${Math.max(0, players.length - readyCount)} player(s) still need to ready up.`
-                    : `Minimum players to start: 3. Current players: ${players.length}.`}
+                    : `Minimum players to start: 3. Current players: ${players.length}/${room?.maxPlayers ?? 20}.`}
                 </p>
                 {room?.phase === "results" && (
                   <p className="mt-2 text-sm font-semibold text-slate-700 dark:text-slate-200">
@@ -297,12 +412,31 @@ export default function ImpostorLobbyPage() {
           )}
 
           <div className="flex flex-col gap-3 sm:flex-row">
+            {room?.status === "finished" && currentPlayer && (
+              <Button
+                size="lg"
+                variant={
+                  currentPlayer.readyForNextRound ? "secondary" : "default"
+                }
+                onClick={() =>
+                  setReadyForNextRound(!currentPlayer.readyForNextRound)
+                }
+                disabled={readyLoading || loading}
+              >
+                {readyLoading
+                  ? "Updating..."
+                  : currentPlayer.readyForNextRound
+                    ? "Marked Ready"
+                    : "Ready For Next Round"}
+              </Button>
+            )}
             {isHost ? (
               <Button
                 size="lg"
                 onClick={startRoom}
                 disabled={
                   starting ||
+                  readyLoading ||
                   players.length < 3 ||
                   loading ||
                   (room?.status === "finished" && !allReady)
@@ -322,13 +456,23 @@ export default function ImpostorLobbyPage() {
             <Button
               size="lg"
               variant="ghost"
-              onClick={() => router.push("/game/impostor")}
+              onClick={() => setShowExitModal(true)}
             >
               Back
             </Button>
           </div>
         </Card>
       </div>
+
+      <ExitGameModal
+        open={showExitModal}
+        title="Would you like to leave this room?"
+        description={exitDescription}
+        confirmLabel="Leave Room"
+        cancelLabel="Cancel"
+        onConfirm={() => void leaveRoomAndNavigate("/game/impostor/join")}
+        onCancel={() => setShowExitModal(false)}
+      />
     </main>
   );
 }

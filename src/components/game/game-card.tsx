@@ -30,15 +30,7 @@ export function GameCard() {
             variant="secondary"
             className="w-full sm:w-auto"
           >
-            <Link href="/game/impostor#create-game">Create Game</Link>
-          </Button>
-          <Button
-            asChild
-            size="xl"
-            variant="ghost"
-            className="w-full sm:w-auto"
-          >
-            <Link href="/game/impostor#join-game">Join A Game</Link>
+            <Link href="/game/impostor/join">Join Online</Link>
           </Button>
         </div>
       </Card>
