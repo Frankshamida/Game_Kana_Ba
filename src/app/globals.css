@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 219 100% 98%;
+  --foreground: 220 38% 12%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 38% 12%;
+  --primary: 206 100% 45%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 192 95% 94%;
+  --secondary-foreground: 220 38% 12%;
+  --muted: 214 35% 94%;
+  --muted-foreground: 218 20% 36%;
+  --accent: 34 98% 93%;
+  --accent-foreground: 220 38% 12%;
+  --border: 215 32% 86%;
+  --input: 216 26% 92%;
+  --ring: 206 100% 45%;
+  --radius: 1.2rem;
+}
+
+.dark {
+  --background: 220 35% 10%;
+  --foreground: 210 35% 95%;
+  --card: 220 28% 14%;
+  --card-foreground: 210 35% 95%;
+  --primary: 201 100% 55%;
+  --primary-foreground: 220 35% 10%;
+  --secondary: 220 24% 20%;
+  --secondary-foreground: 210 35% 95%;
+  --muted: 220 22% 18%;
+  --muted-foreground: 214 15% 72%;
+  --accent: 196 35% 20%;
+  --accent-foreground: 210 35% 95%;
+  --border: 220 18% 28%;
+  --input: 220 20% 22%;
+  --ring: 201 100% 55%;
+}
+
+* {
+  @apply border-border;
+}
+
+body {
+  @apply bg-background text-foreground font-body antialiased;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(255, 183, 77, 0.25), transparent 40%),
+    radial-gradient(circle at 85% 0%, rgba(0, 173, 239, 0.3), transparent 35%),
+    radial-gradient(circle at 50% 90%, rgba(67, 160, 71, 0.24), transparent 38%);
+}
+
+.dark body {
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(0, 173, 239, 0.16), transparent 36%),
+    radial-gradient(circle at 90% 15%, rgba(255, 183, 77, 0.14), transparent 32%),
+    radial-gradient(circle at 45% 85%, rgba(67, 160, 71, 0.12), transparent 35%);
+}
+
+.glass {
+  @apply bg-white/55 backdrop-blur-xl border border-white/60 shadow-lg;
+}
+
+.dark .glass {
+  @apply bg-slate-900/55 border-slate-700/60;
+}
+
+.card3d {
+  transform-style: preserve-3d;
+  transition: transform 0.65s;
+}
+
+.card3d.flipped {
+  transform: rotateY(180deg);
+}
+
+.card3d-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card3d-back {
+  transform: rotateY(180deg);
+}
