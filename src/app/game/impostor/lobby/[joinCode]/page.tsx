@@ -227,9 +227,6 @@ export default function ImpostorLobbyPage() {
         `/game/impostor/invite/${joinCode}`,
         window.location.origin,
       );
-      inviteUrl.searchParams.set("joinCode", joinCode);
-      inviteUrl.searchParams.set("roomName", room.roomName);
-      inviteUrl.searchParams.set("invitedBy", inviteLabel);
 
       await navigator.clipboard.writeText(inviteUrl.toString());
       setCopied(true);

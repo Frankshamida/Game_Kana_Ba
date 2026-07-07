@@ -50,11 +50,7 @@ export function JoinClient() {
   const [creating, setCreating] = useState(false);
   const [showPrivateJoinModal, setShowPrivateJoinModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showInviteModal, setShowInviteModal] = useState(false);
   const [invitePlayerName, setInvitePlayerName] = useState("");
-  const [inviteJoinCode, setInviteJoinCode] = useState("");
-  const [inviteRoomName, setInviteRoomName] = useState("");
-  const [inviteInviterName, setInviteInviterName] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const hintDifficulty: HintDifficulty = "normal";
@@ -63,6 +59,18 @@ export function JoinClient() {
     () => `${rooms.length} room${rooms.length === 1 ? "" : "s"}`,
     [rooms.length],
   );
+
+  const inviteDetails = useMemo(() => {
+    const inviteJoinCode =
+      searchParams?.get("joinCode")?.trim().toUpperCase() ?? "";
+
+    return {
+      joinCode: inviteJoinCode,
+      roomName: searchParams?.get("roomName")?.trim() ?? "Impostor Room",
+      inviterName: searchParams?.get("invitedBy")?.trim() ?? "A friend",
+      showInviteModal: Boolean(inviteJoinCode),
+    };
+  }, [searchParams]);
 
   const saveRemoteSession = (roomCode: string, playerToken: string) => {
     const session: RemoteImpostorSession = {
@@ -130,24 +138,6 @@ export function JoinClient() {
       void loadPublicRooms();
     });
   }, []);
-
-  useEffect(() => {
-    const joinCodeFromInvite =
-      searchParams?.get("joinCode")?.trim().toUpperCase() ?? "";
-
-    if (!joinCodeFromInvite) {
-      return;
-    }
-
-    setInviteJoinCode(joinCodeFromInvite);
-    setInviteRoomName(
-      searchParams?.get("roomName")?.trim() ?? "Impostor Room",
-    );
-    setInviteInviterName(searchParams?.get("invitedBy")?.trim() ?? "A friend");
-    setInvitePlayerName("");
-    setShowInviteModal(true);
-    setError(null);
-  }, [searchParams]);
 
   const joinRoom = async (payload: {
     roomId?: string;
@@ -220,7 +210,7 @@ export function JoinClient() {
 
   const joinInviteRoom = async () => {
     await joinRoom({
-      joinCode: inviteJoinCode,
+      joinCode: inviteDetails.joinCode,
       playerName: invitePlayerName,
     });
   };
@@ -771,7 +761,7 @@ export function JoinClient() {
           </div>
         )}
 
-        {showInviteModal && (
+        {inviteDetails.showInviteModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
             <Card className="w-full max-w-md space-y-4 border-cyan-200/70 bg-white/95 shadow-[0_24px_72px_rgba(8,145,178,0.22)] dark:border-cyan-900/40 dark:bg-slate-950/92">
               <div className="space-y-2">
@@ -779,10 +769,10 @@ export function JoinClient() {
                   Invite Received
                 </p>
                 <h2 className="text-3xl font-black leading-tight text-slate-950 dark:text-slate-50">
-                  {inviteInviterName} invited you to Join
+                  {inviteDetails.inviterName} invited you to Join
                 </h2>
                 <p className="text-lg font-semibold text-slate-700 dark:text-slate-300">
-                  {inviteRoomName}
+                  {inviteDetails.roomName}
                 </p>
               </div>
 
@@ -818,7 +808,6 @@ export function JoinClient() {
                   size="lg"
                   variant="ghost"
                   onClick={() => {
-                    setShowInviteModal(false);
                     setError(null);
                     router.replace("/game/impostor/join");
                   }}
