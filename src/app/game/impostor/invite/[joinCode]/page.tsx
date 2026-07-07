@@ -9,15 +9,56 @@ const applicationName = "GatherUp";
 
 type InvitePageProps = {
   params: Promise<{ joinCode: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
+
+type InvitePreviewParams = {
+  roomName?: string;
+  invitedBy?: string;
+};
+
+function getPreviewValue(
+  value: string | string[] | undefined,
+  fallback: string,
+) {
+  if (Array.isArray(value)) {
+    return value[0]?.trim() || fallback;
+  }
+
+  return value?.trim() || fallback;
+}
+
+function getInvitePreviewParams(
+  searchParams: Record<string, string | string[] | undefined>,
+): InvitePreviewParams {
+  return {
+    roomName: getPreviewValue(searchParams.roomName, ""),
+    invitedBy: getPreviewValue(searchParams.invitedBy, ""),
+  };
+}
 
 function buildInviteMetadata(
   joinCode: string,
   invite: Awaited<ReturnType<typeof getImpostorInviteDetails>>,
+  previewParams: InvitePreviewParams,
 ): Metadata {
-  const roomName = invite?.roomName ?? "Impostor Room";
-  const invitedBy = invite?.inviterName ?? "A friend";
-  const isJoinable = invite?.isJoinable ?? false;
+  const roomName =
+    previewParams.roomName || invite?.roomName || "Impostor Room";
+  const invitedBy =
+    previewParams.invitedBy || invite?.inviterName || "A friend";
+  const isJoinable = invite?.isJoinable ?? Boolean(previewParams.roomName);
+  const previewImageUrl = new URL(
+    `/game/impostor/invite/${joinCode}/opengraph-image`,
+    siteUrl,
+  );
+
+  if (previewParams.roomName) {
+    previewImageUrl.searchParams.set("roomName", previewParams.roomName);
+  }
+
+  if (previewParams.invitedBy) {
+    previewImageUrl.searchParams.set("invitedBy", previewParams.invitedBy);
+  }
 
   const title = invite
     ? isJoinable
@@ -61,7 +102,7 @@ function buildInviteMetadata(
       siteName: applicationName,
       images: [
         {
-          url: `${siteUrl}/game/impostor/invite/${joinCode}/opengraph-image`,
+          url: previewImageUrl.toString(),
           width: 1200,
           height: 630,
           alt: invite
@@ -75,18 +116,25 @@ function buildInviteMetadata(
       title,
       description,
       creator: "@frankshamida",
-      images: [`${siteUrl}/game/impostor/invite/${joinCode}/opengraph-image`],
+      images: [previewImageUrl.toString()],
     },
   };
 }
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: InvitePageProps): Promise<Metadata> {
   const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
   const joinCode = resolvedParams.joinCode.toUpperCase();
-  const invite = await getImpostorInviteDetails(joinCode);
-  return buildInviteMetadata(joinCode, invite);
+  const previewParams = getInvitePreviewParams(resolvedSearchParams);
+  const invite =
+    previewParams.roomName && previewParams.invitedBy
+      ? null
+      : await getImpostorInviteDetails(joinCode);
+
+  return buildInviteMetadata(joinCode, invite, previewParams);
 }
 
 export default async function InvitePage({ params }: InvitePageProps) {

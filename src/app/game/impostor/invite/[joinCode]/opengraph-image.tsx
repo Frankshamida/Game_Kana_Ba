@@ -10,17 +10,29 @@ export const contentType = "image/png";
 
 export default async function OpenGraphImage({
   params,
+  searchParams,
 }: {
   params: Promise<{ joinCode: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
   const joinCode = resolvedParams.joinCode.toUpperCase();
-  const invite = await getImpostorInviteDetails(joinCode);
-  const roomName = invite?.roomName ?? "Impostor Room";
-  const inviterName = invite?.inviterName ?? "A friend";
+  const previewRoomName = Array.isArray(resolvedSearchParams.roomName)
+    ? resolvedSearchParams.roomName[0]?.trim()
+    : resolvedSearchParams.roomName?.trim();
+  const previewInviterName = Array.isArray(resolvedSearchParams.invitedBy)
+    ? resolvedSearchParams.invitedBy[0]?.trim()
+    : resolvedSearchParams.invitedBy?.trim();
+  const shouldUsePreview = Boolean(previewRoomName || previewInviterName);
+  const invite = shouldUsePreview
+    ? null
+    : await getImpostorInviteDetails(joinCode);
+  const roomName = previewRoomName || invite?.roomName || "Impostor Room";
+  const inviterName = previewInviterName || invite?.inviterName || "A friend";
   const playerCount = invite?.playerCount ?? 0;
   const maxPlayers = invite?.maxPlayers ?? 0;
-  const isJoinable = invite?.isJoinable ?? false;
+  const isJoinable = invite?.isJoinable ?? shouldUsePreview;
 
   return new ImageResponse(
     <div
