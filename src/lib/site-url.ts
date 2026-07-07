@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 export function getSiteUrl() {
   const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
   if (configuredUrl) {
@@ -16,3 +17,23 @@ export function getSiteUrl() {
 
   return "https://frankshamida.vercel.app";
 }
+=======
+const fallbackSiteUrl = "https://frankshamida.vercel.app";
+
+export function getSiteUrl() {
+  const configuredUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ??
+    process.env.VERCEL_URL;
+
+  if (!configuredUrl) {
+    return fallbackSiteUrl;
+  }
+
+  if (configuredUrl.startsWith("http://") || configuredUrl.startsWith("https://")) {
+    return configuredUrl;
+  }
+
+  return `https://${configuredUrl}`;
+}
+>>>>>>> Stashed changes
