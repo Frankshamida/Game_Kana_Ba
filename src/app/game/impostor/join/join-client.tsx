@@ -21,6 +21,18 @@ interface PublicRoomListItem {
   playerCount: number;
 }
 
+function getRoomStatusLabel(room: ImpostorRoom) {
+  if (room.status === "started") {
+    return "Started";
+  }
+
+  if (room.status === "finished") {
+    return "Finished";
+  }
+
+  return room.phase === "lobby" ? "Open" : "Waiting";
+}
+
 const ROOM_LIST_CACHE_KEY = "impostorRoomListCacheV1";
 const ROOM_LIST_CACHE_TTL_MS = 12_000;
 
@@ -377,76 +389,97 @@ export function JoinClient() {
               </p>
             ) : (
               <ul className="mt-3 grid gap-3">
-                {rooms.map((item) => (
-                  <li
-                    key={item.room.id}
-                    className="group relative overflow-hidden rounded-xl border border-cyan-200/70 bg-gradient-to-br from-cyan-50/90 via-white/90 to-blue-50/90 p-3 shadow-[0_8px_24px_rgba(14,165,233,0.12)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(14,165,233,0.2)] dark:border-cyan-500/25 dark:from-slate-900/85 dark:via-slate-900/90 dark:to-blue-950/55"
-                  >
-                    <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100">
-                      <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-cyan-400/15 blur-xl" />
-                    </div>
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                      <div className="space-y-1.5">
-                        <p className="text-lg font-black text-slate-900 dark:text-slate-100">
-                          {item.room.roomName}
-                        </p>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="inline-flex items-center rounded-full bg-cyan-500/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-cyan-800 dark:bg-cyan-400/20 dark:text-cyan-200">
-                            {item.room.isPublic ? "Public" : "Private"}
-                          </span>
-                          <span className="inline-flex items-center gap-1 rounded-full bg-slate-900/6 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-50/10 dark:text-slate-200">
-                            <User className="h-3.5 w-3.5" />
-                            Host: {item.hostName}
-                          </span>
-                          <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/15 px-2.5 py-1 text-xs font-semibold text-blue-800 dark:bg-blue-400/20 dark:text-blue-200">
-                            <Users className="h-3.5 w-3.5" />
-                            {item.playerCount}/{item.room.maxPlayers}
-                          </span>
-                        </div>
-                        <div className="pt-0.5">
-                          <div className="h-1.5 w-full rounded-full bg-slate-300/70 dark:bg-slate-700/80">
-                            <div
-                              className="h-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
-                              style={{
-                                width: `${Math.min(
-                                  100,
-                                  item.room.maxPlayers > 0
-                                    ? Math.round(
-                                        (item.playerCount /
-                                          item.room.maxPlayers) *
-                                          100,
-                                      )
-                                    : 0,
-                                )}%`,
-                              }}
-                            />
+                {rooms.map((item) => {
+                  const isJoinable =
+                    item.room.status === "waiting" &&
+                    item.room.phase === "lobby" &&
+                    item.playerCount < item.room.maxPlayers;
+
+                  return (
+                    <li
+                      key={item.room.id}
+                      className={`group relative overflow-hidden rounded-xl border p-3 shadow-[0_8px_24px_rgba(14,165,233,0.12)] transition dark:border-cyan-500/25 dark:from-slate-900/85 dark:via-slate-900/90 dark:to-blue-950/55 ${
+                        isJoinable
+                          ? "border-cyan-200/70 bg-gradient-to-br from-cyan-50/90 via-white/90 to-blue-50/90 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(14,165,233,0.2)]"
+                          : "border-slate-300/80 bg-slate-100/80 opacity-90"
+                      }`}
+                    >
+                      <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100">
+                        <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-cyan-400/15 blur-xl" />
+                      </div>
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="space-y-1.5">
+                          <p className="text-lg font-black text-slate-900 dark:text-slate-100">
+                            {item.room.roomName}
+                          </p>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="inline-flex items-center rounded-full bg-cyan-500/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-cyan-800 dark:bg-cyan-400/20 dark:text-cyan-200">
+                              {item.room.isPublic ? "Public" : "Private"}
+                            </span>
+                            <span
+                              className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] ${
+                                item.room.status === "started"
+                                  ? "bg-amber-500/15 text-amber-800 dark:bg-amber-400/20 dark:text-amber-200"
+                                  : "bg-emerald-500/15 text-emerald-800 dark:bg-emerald-400/20 dark:text-emerald-200"
+                              }`}
+                            >
+                              {getRoomStatusLabel(item.room)}
+                            </span>
+                            <span className="inline-flex items-center gap-1 rounded-full bg-slate-900/6 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-50/10 dark:text-slate-200">
+                              <User className="h-3.5 w-3.5" />
+                              Host: {item.hostName}
+                            </span>
+                            <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/15 px-2.5 py-1 text-xs font-semibold text-blue-800 dark:bg-blue-400/20 dark:text-blue-200">
+                              <Users className="h-3.5 w-3.5" />
+                              {item.playerCount}/{item.room.maxPlayers}
+                            </span>
+                          </div>
+                          <div className="pt-0.5">
+                            <div className="h-1.5 w-full rounded-full bg-slate-300/70 dark:bg-slate-700/80">
+                              <div
+                                className="h-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
+                                style={{
+                                  width: `${Math.min(
+                                    100,
+                                    item.room.maxPlayers > 0
+                                      ? Math.round(
+                                          (item.playerCount /
+                                            item.room.maxPlayers) *
+                                            100,
+                                        )
+                                      : 0,
+                                  )}%`,
+                                }}
+                              />
+                            </div>
                           </div>
                         </div>
+                        <Button
+                          type="button"
+                          size="lg"
+                          className="min-w-36 shadow-[0_8px_22px_rgba(14,165,233,0.32)]"
+                          onClick={() => {
+                            setSelectedRoom(item);
+                            setJoinPlayerName("");
+                            setSelectedRoomJoinCode("");
+                            setError(null);
+                          }}
+                          disabled={
+                            !isJoinable || joiningRoomId === item.room.id
+                          }
+                        >
+                          {joiningRoomId === item.room.id
+                            ? "Joining..."
+                            : !isJoinable
+                              ? "Started"
+                              : item.playerCount >= item.room.maxPlayers
+                                ? "Room Full"
+                                : "Join Room"}
+                        </Button>
                       </div>
-                      <Button
-                        type="button"
-                        size="lg"
-                        className="min-w-36 shadow-[0_8px_22px_rgba(14,165,233,0.32)]"
-                        onClick={() => {
-                          setSelectedRoom(item);
-                          setJoinPlayerName("");
-                          setSelectedRoomJoinCode("");
-                          setError(null);
-                        }}
-                        disabled={
-                          joiningRoomId === item.room.id ||
-                          item.playerCount >= item.room.maxPlayers
-                        }
-                      >
-                        {joiningRoomId === item.room.id
-                          ? "Joining..."
-                          : item.playerCount >= item.room.maxPlayers
-                            ? "Room Full"
-                            : "Join Room"}
-                      </Button>
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </section>

@@ -27,8 +27,7 @@ export async function GET() {
   const roomsResult = await supabase
     .from("impostor_rooms")
     .select("*")
-    .eq("status", "waiting")
-    .eq("phase", "lobby")
+    .in("status", ["waiting", "started"])
     .order("created_at", { ascending: false })
     .limit(30)
     .returns<ImpostorRoomRow[]>();

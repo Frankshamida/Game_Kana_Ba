@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { InstallPrompt } from "@/components/pwa/install-prompt";
 import { MobileNavbar } from "@/components/ui/mobile-navbar";
 import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
@@ -13,6 +14,13 @@ export const metadata: Metadata = {
     template: "%s | GatherUp",
   },
   description: "Play. Laugh. Connect.",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "GatherUp",
+    statusBarStyle: "black-translucent",
+  },
+  applicationName: "GatherUp",
   openGraph: {
     type: "website",
     siteName: "GatherUp",
@@ -42,6 +50,7 @@ export default function RootLayout({
             } catch {}
           })();`}
         </Script>
+        <InstallPrompt />
         <div className="flex-1 pb-28 md:pb-14">{children}</div>
         <MobileNavbar />
         <footer className="fixed inset-x-0 bottom-0 z-40 hidden border-t border-white/40 bg-white/35 px-4 py-3 text-center text-xs text-slate-700 backdrop-blur-md dark:border-slate-700/70 dark:bg-slate-900/45 dark:text-slate-300 md:block">
