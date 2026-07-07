@@ -51,7 +51,6 @@ export default async function OpenGraphImage({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          zIndex: 1,
         }}
       >
         <div
@@ -79,7 +78,6 @@ export default async function OpenGraphImage({
               fontSize: 22,
               fontWeight: 800,
               letterSpacing: 2,
-              textTransform: "uppercase",
             }}
           >
             GatherUp
@@ -101,7 +99,6 @@ export default async function OpenGraphImage({
           display: "flex",
           gap: 48,
           alignItems: "stretch",
-          zIndex: 1,
         }}
       >
         <div
@@ -164,7 +161,12 @@ export default async function OpenGraphImage({
             backdropFilter: "blur(14px)",
           }}
         >
-          <div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
             <div
               style={{
                 width: "100%",
@@ -217,7 +219,7 @@ export default async function OpenGraphImage({
           <div
             style={{
               marginTop: 18,
-              display: "inline-flex",
+              display: "flex",
               alignItems: "center",
               justifyContent: "center",
               padding: "16px 20px",
