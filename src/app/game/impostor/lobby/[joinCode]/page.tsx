@@ -231,6 +231,13 @@ export default function ImpostorLobbyPage() {
       inviteUrl.searchParams.set("roomName", room.roomName);
       inviteUrl.searchParams.set("invitedBy", inviteLabel);
 
+      inviteUrl.searchParams.set("joinCode", joinCode);
+      inviteUrl.searchParams.set("roomName", room?.roomName ?? "Impostor Room");
+      inviteUrl.searchParams.set(
+        "invitedBy",
+        currentPlayer?.playerName ?? "A friend",
+      );
+
       await navigator.clipboard.writeText(inviteUrl.toString());
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);

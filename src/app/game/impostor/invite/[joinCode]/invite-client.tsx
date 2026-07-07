@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Loader2, Sparkles } from "lucide-react";
+import { ArrowRight, Crown, Loader2, Sparkles, Users } from "lucide-react";
 import { AnimatedBackground } from "@/components/game/animated-background";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -16,12 +16,20 @@ type InviteClientProps = {
   joinCode: string;
   roomName: string;
   invitedBy: string;
+  playerCount: number;
+  maxPlayers: number;
+  isPublic: boolean;
+  isJoinable: boolean;
 };
 
 export function InviteClient({
   joinCode,
   roomName,
   invitedBy,
+  playerCount,
+  maxPlayers,
+  isPublic,
+  isJoinable,
 }: InviteClientProps) {
   const router = useRouter();
   const [playerName, setPlayerName] = useState("");
@@ -79,6 +87,68 @@ export function InviteClient({
     }
   };
 
+  if (!isJoinable) {
+    return (
+      <main className="relative min-h-screen overflow-hidden px-4 py-8">
+        <AnimatedBackground />
+        <div className="container mx-auto flex min-h-[calc(100vh-4rem)] max-w-3xl items-center justify-center">
+          <Card className="w-full max-w-xl space-y-5 border-white/80 bg-white/85 p-8 text-center shadow-[0_28px_90px_rgba(15,23,42,0.18)] backdrop-blur dark:border-slate-700/80 dark:bg-slate-950/75">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-500/10 text-red-700 dark:text-red-300">
+              <Crown className="h-8 w-8" />
+            </div>
+            <div className="space-y-2">
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-red-700 dark:text-red-300">
+                Room Expired
+              </p>
+              <h1 className="font-display text-4xl font-black text-slate-950 dark:text-slate-50">
+                {roomName}
+              </h1>
+              <p className="text-sm text-slate-600 dark:text-slate-300">
+                This game room is no longer joinable.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                  Players
+                </p>
+                <p className="mt-1 text-lg font-black text-slate-950 dark:text-slate-50">
+                  {playerCount}/{maxPlayers}
+                </p>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                  Visibility
+                </p>
+                <p className="mt-1 text-lg font-black text-slate-950 dark:text-slate-50">
+                  {isPublic ? "Public" : "Private"}
+                </p>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                  Join Code
+                </p>
+                <p className="mt-1 text-lg font-black text-slate-950 dark:text-slate-50">
+                  {joinCode}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-center gap-3">
+              <Button
+                size="lg"
+                onClick={() => router.push("/game/impostor/join")}
+              >
+                Return Home
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="relative min-h-screen overflow-hidden px-4 py-8">
       <AnimatedBackground />
@@ -92,29 +162,28 @@ export function InviteClient({
               </div>
               <div className="relative flex h-full flex-col justify-between gap-10">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-100/90">
-                    Game Invite
-                  </p>
-                  <h1 className="mt-3 font-display text-4xl font-black leading-tight md:text-5xl">
-                    {invitedBy} invited you to join
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.22em] text-cyan-100">
+                    <Sparkles className="h-4 w-4" /> Game Invite
+                  </div>
+                  <h1 className="mt-4 font-display text-4xl font-black leading-tight md:text-5xl">
+                    Join &quot;{roomName}&quot;
                   </h1>
-                  <p className="mt-3 text-lg font-semibold text-cyan-50/90">
-                    {roomName}
+                  <p className="mt-3 max-w-xl text-lg font-semibold text-cyan-50/90">
+                    {invitedBy} invited you to play Impostor.
                   </p>
                 </div>
 
                 <div className="rounded-3xl border border-white/20 bg-white/10 p-5 shadow-[0_18px_50px_rgba(2,6,23,0.28)] backdrop-blur">
                   <div className="flex items-center gap-3">
                     <div className="rounded-2xl bg-white/15 p-3">
-                      <Sparkles className="h-6 w-6" />
+                      <Crown className="h-6 w-6" />
                     </div>
                     <div>
                       <p className="text-sm font-bold uppercase tracking-[0.18em] text-cyan-100/80">
                         Ready to play
                       </p>
                       <p className="mt-1 text-sm text-cyan-50/85">
-                        Enter your name and the room will take you straight into
-                        the game.
+                        Enter your name and jump into the match instantly.
                       </p>
                     </div>
                   </div>
@@ -135,6 +204,50 @@ export function InviteClient({
                     This keeps the invite clean and mobile-friendly while
                     showing the room name clearly.
                   </p>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                      Room Name
+                    </p>
+                    <p className="mt-1 break-words text-lg font-black text-slate-950 dark:text-slate-50">
+                      {roomName}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                      Join Code
+                    </p>
+                    <p className="mt-1 break-words text-lg font-black text-slate-950 dark:text-slate-50">
+                      {joinCode}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="flex items-center gap-3 rounded-2xl border border-cyan-200/70 bg-cyan-50/80 p-4 dark:border-cyan-900/40 dark:bg-cyan-950/25">
+                    <Users className="h-5 w-5 text-cyan-700 dark:text-cyan-300" />
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-700/80 dark:text-cyan-300/80">
+                        Players
+                      </p>
+                      <p className="text-lg font-black text-slate-950 dark:text-slate-50">
+                        {playerCount}/{maxPlayers}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70">
+                    <Crown className="h-5 w-5 text-slate-700 dark:text-slate-300" />
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                        Visibility
+                      </p>
+                      <p className="text-lg font-black text-slate-950 dark:text-slate-50">
+                        {isPublic ? "Public" : "Private"}
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 <div>
@@ -179,7 +292,7 @@ export function InviteClient({
                     variant="secondary"
                     onClick={() => router.push("/game/impostor/join")}
                   >
-                    Back
+                    Return Home
                   </Button>
                 </div>
               </div>
