@@ -87,5 +87,5 @@ export async function getImpostorInviteDetails(joinCode: string) {
 }
 
 export function invalidateImpostorInvitePreviews() {
-  revalidateTag(INVITE_PREVIEW_TAG);
+  revalidateTag(INVITE_PREVIEW_TAG, "max");
 }
