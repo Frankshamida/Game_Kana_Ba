@@ -1,8 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Download, X } from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logo from "@/app/public/Logo/GatherUp.webp";
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -91,8 +93,13 @@ export function InstallPrompt() {
     <div className="fixed inset-x-0 top-0 z-[60] flex justify-center px-4 pt-4">
       <div className="w-full max-w-md rounded-3xl border border-cyan-200/70 bg-slate-950/95 p-4 text-white shadow-[0_24px_70px_rgba(2,6,23,0.45)] backdrop-blur-xl dark:border-cyan-500/20">
         <div className="flex items-start gap-3">
-          <div className="rounded-2xl bg-cyan-400/15 p-2 text-cyan-200">
-            <Download className="h-5 w-5" />
+          <div className="overflow-hidden rounded-2xl bg-white/10 p-1 ring-1 ring-cyan-300/20">
+            <Image
+              src={logo}
+              alt="GatherUp logo"
+              className="h-10 w-10 rounded-xl object-cover"
+              priority
+            />
           </div>
           <div className="flex-1 space-y-1">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-200/90">

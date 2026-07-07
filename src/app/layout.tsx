@@ -3,6 +3,7 @@ import Script from "next/script";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
 import { MobileNavbar } from "@/components/ui/mobile-navbar";
 import { getSiteUrl } from "@/lib/site-url";
+import logo from "./public/Logo/GatherUp.webp";
 import "./globals.css";
 
 const siteUrl = getSiteUrl();
@@ -19,8 +20,15 @@ export const metadata: Metadata = {
     capable: true,
     title: "GatherUp",
     statusBarStyle: "black-translucent",
+    startupImage: {
+      url: "/startup-image",
+    },
   },
   applicationName: "GatherUp",
+  icons: {
+    icon: [{ url: logo.src, type: "image/webp", sizes: "any" }],
+    apple: [{ url: logo.src, type: "image/webp", sizes: "any" }],
+  },
   openGraph: {
     type: "website",
     siteName: "GatherUp",

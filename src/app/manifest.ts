@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import logo from "./public/Logo/GatherUp.webp";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -13,9 +14,9 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#0ea5e9",
     icons: [
       {
-        src: "/og-impostor-invite.svg",
+        src: logo.src,
         sizes: "any",
-        type: "image/svg+xml",
+        type: "image/webp",
       },
     ],
   };
