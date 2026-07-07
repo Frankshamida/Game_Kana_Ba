@@ -220,7 +220,12 @@ export default function ImpostorLobbyPage() {
 
   const copyCode = async () => {
     try {
-      await navigator.clipboard.writeText(joinCode);
+      const inviteUrl = new URL(
+        `/game/impostor/invite/${joinCode}`,
+        window.location.origin,
+      );
+
+      await navigator.clipboard.writeText(inviteUrl.toString());
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
