@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import { getImpostorInviteDetails } from "@/lib/impostor-invite";
 
 export const runtime = "nodejs";
+export const revalidate = 60;
 export const size = {
   width: 1200,
   height: 630,
@@ -10,29 +11,17 @@ export const contentType = "image/png";
 
 export default async function OpenGraphImage({
   params,
-  searchParams,
 }: {
   params: Promise<{ joinCode: string }>;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const resolvedParams = await params;
-  const resolvedSearchParams = await searchParams;
   const joinCode = resolvedParams.joinCode.toUpperCase();
-  const previewRoomName = Array.isArray(resolvedSearchParams.roomName)
-    ? resolvedSearchParams.roomName[0]?.trim()
-    : resolvedSearchParams.roomName?.trim();
-  const previewInviterName = Array.isArray(resolvedSearchParams.invitedBy)
-    ? resolvedSearchParams.invitedBy[0]?.trim()
-    : resolvedSearchParams.invitedBy?.trim();
-  const shouldUsePreview = Boolean(previewRoomName || previewInviterName);
-  const invite = shouldUsePreview
-    ? null
-    : await getImpostorInviteDetails(joinCode);
-  const roomName = previewRoomName || invite?.roomName || "Impostor Room";
-  const inviterName = previewInviterName || invite?.inviterName || "A friend";
+  const invite = await getImpostorInviteDetails(joinCode);
+  const roomName = invite?.roomName ?? "Impostor Room";
+  const inviterName = invite?.inviterName ?? "A friend";
   const playerCount = invite?.playerCount ?? 0;
   const maxPlayers = invite?.maxPlayers ?? 0;
-  const isJoinable = invite?.isJoinable ?? shouldUsePreview;
+  const isJoinable = invite?.isJoinable ?? false;
 
   return new ImageResponse(
     <div

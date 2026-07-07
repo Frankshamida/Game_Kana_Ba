@@ -3,7 +3,10 @@ import {
   type ImpostorRoomPlayerRow,
   type ImpostorRoomRow,
 } from "@/lib/impostor-room";
+import { revalidateTag, unstable_cache } from "next/cache";
 import { getServiceSupabase } from "@/lib/supabase-server";
+
+const INVITE_PREVIEW_TAG = "impostor-invite-preview";
 
 export interface ImpostorInviteDetails {
   joinCode: string;
@@ -17,21 +20,16 @@ export interface ImpostorInviteDetails {
   isJoinable: boolean;
 }
 
-export async function getImpostorInviteDetails(joinCode: string) {
+async function fetchImpostorInviteDetails(joinCode: string) {
   const supabase = getServiceSupabase();
   if (!supabase) {
-    return null;
-  }
-
-  const safeJoinCode = joinCode.trim().toUpperCase();
-  if (!safeJoinCode) {
     return null;
   }
 
   const roomResult = await supabase
     .from("impostor_rooms")
     .select("*")
-    .eq("join_code", safeJoinCode)
+    .eq("join_code", joinCode)
     .single<ImpostorRoomRow>();
 
   if (roomResult.error || !roomResult.data) {
@@ -58,7 +56,7 @@ export async function getImpostorInviteDetails(joinCode: string) {
   const isJoinable = room.status === "waiting" && room.phase === "lobby";
 
   return {
-    joinCode: safeJoinCode,
+    joinCode,
     roomName: room.roomName,
     inviterName,
     playerCount: players.length,
@@ -68,4 +66,26 @@ export async function getImpostorInviteDetails(joinCode: string) {
     roomPhase: room.phase,
     isJoinable,
   } satisfies ImpostorInviteDetails;
+}
+
+const cachedImpostorInviteDetails = unstable_cache(
+  async (joinCode: string) => fetchImpostorInviteDetails(joinCode),
+  ["impostor-invite-details"],
+  {
+    revalidate: 60,
+    tags: [INVITE_PREVIEW_TAG],
+  },
+);
+
+export async function getImpostorInviteDetails(joinCode: string) {
+  const safeJoinCode = joinCode.trim().toUpperCase();
+  if (!safeJoinCode) {
+    return null;
+  }
+
+  return cachedImpostorInviteDetails(safeJoinCode);
+}
+
+export function invalidateImpostorInvitePreviews() {
+  revalidateTag(INVITE_PREVIEW_TAG);
 }

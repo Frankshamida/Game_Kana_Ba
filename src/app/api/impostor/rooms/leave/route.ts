@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { type ImpostorRoomPlayerRow, type ImpostorRoomRow } from "@/lib/impostor-room";
+import { invalidateImpostorInvitePreviews } from "@/lib/impostor-invite";
 import { getServiceSupabase } from "@/lib/supabase-server";
 
 export async function POST(request: NextRequest) {
@@ -80,6 +81,8 @@ export async function POST(request: NextRequest) {
         throw deleteRoomResult.error;
       }
 
+      invalidateImpostorInvitePreviews();
+
       return NextResponse.json({ success: true, roomDeleted: true });
     }
 
@@ -117,6 +120,8 @@ export async function POST(request: NextRequest) {
         throw updateRoomResult.error;
       }
 
+      invalidateImpostorInvitePreviews();
+
       return NextResponse.json({
         success: true,
         roomDeleted: false,
@@ -124,6 +129,8 @@ export async function POST(request: NextRequest) {
         newHostName: nextHost.player_name,
       });
     }
+
+    invalidateImpostorInvitePreviews();
 
     return NextResponse.json({ success: true, roomDeleted: false, hostChanged: false });
   } catch (error) {

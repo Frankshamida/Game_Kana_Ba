@@ -1,6 +1,7 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { buildJoinResponse, mapRoomRow, type ImpostorRoomPlayerRow, type ImpostorRoomRow } from "@/lib/impostor-room";
+import { invalidateImpostorInvitePreviews } from "@/lib/impostor-invite";
 import { getServiceSupabase } from "@/lib/supabase-server";
 
 export async function POST(request: NextRequest) {
@@ -71,6 +72,8 @@ export async function POST(request: NextRequest) {
     if (playerInsert.error) {
       throw playerInsert.error;
     }
+
+    invalidateImpostorInvitePreviews();
 
     return NextResponse.json(buildJoinResponse(roomResult.data, playerInsert.data));
   } catch (error) {

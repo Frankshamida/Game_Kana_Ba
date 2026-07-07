@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { mapRoomRow, type ImpostorRoomRow } from "@/lib/impostor-room";
+import { invalidateImpostorInvitePreviews } from "@/lib/impostor-invite";
 import { getServiceSupabase } from "@/lib/supabase-server";
 
 interface PublicRoomPlayerRow {
@@ -65,12 +66,14 @@ export async function GET() {
     hostName: string;
     playerCount: number;
   }> = [];
+  let didMutateRoom = false;
 
   for (const room of rooms) {
     const roomPlayers = playersByRoom.get(room.id) ?? [];
 
     if (roomPlayers.length === 0) {
       await supabase.from("impostor_rooms").delete().eq("id", room.id);
+      didMutateRoom = true;
       continue;
     }
 
@@ -108,6 +111,7 @@ export async function GET() {
       }
 
       effectiveHostName = newHost.player_name;
+      didMutateRoom = true;
     }
 
     payload.push({
@@ -115,6 +119,10 @@ export async function GET() {
       hostName: effectiveHostName,
       playerCount: roomPlayers.length,
     });
+  }
+
+  if (didMutateRoom) {
+    invalidateImpostorInvitePreviews();
   }
 
   return NextResponse.json(

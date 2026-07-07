@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createImpostorRound } from "@/app/game/impostor/actions";
 import { type ImpostorRoomPlayerRow, type ImpostorRoomRow, mapPlayerRow, mapRoomRow } from "@/lib/impostor-room";
+import { invalidateImpostorInvitePreviews } from "@/lib/impostor-invite";
 import { getServiceSupabase } from "@/lib/supabase-server";
 
 export async function POST(request: NextRequest) {
@@ -111,6 +112,8 @@ export async function POST(request: NextRequest) {
     if (refreshedPlayers.error) {
       throw refreshedPlayers.error;
     }
+
+    invalidateImpostorInvitePreviews();
 
     return NextResponse.json({
       room: mapRoomRow(updateRoomResult.data),
