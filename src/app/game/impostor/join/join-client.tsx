@@ -28,6 +28,18 @@ export function JoinClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const inviteDetails = useMemo(() => {
+    const inviteJoinCode =
+      searchParams?.get("joinCode")?.trim().toUpperCase() ?? "";
+
+    return {
+      joinCode: inviteJoinCode,
+      roomName: searchParams?.get("roomName")?.trim() ?? "Impostor Room",
+      inviterName: searchParams?.get("invitedBy")?.trim() ?? "A friend",
+      showInviteModal: Boolean(inviteJoinCode),
+    };
+  }, [searchParams]);
+
   const [selectedRoom, setSelectedRoom] = useState<PublicRoomListItem | null>(
     null,
   );
@@ -50,11 +62,10 @@ export function JoinClient() {
   const [creating, setCreating] = useState(false);
   const [showPrivateJoinModal, setShowPrivateJoinModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(() =>
+    Boolean(searchParams?.get("joinCode")?.trim()),
+  );
   const [invitePlayerName, setInvitePlayerName] = useState("");
-  const [inviteJoinCode, setInviteJoinCode] = useState("");
-  const [inviteRoomName, setInviteRoomName] = useState("");
-  const [inviteInviterName, setInviteInviterName] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const hintDifficulty: HintDifficulty = "normal";
@@ -131,24 +142,6 @@ export function JoinClient() {
     });
   }, []);
 
-  useEffect(() => {
-    const joinCodeFromInvite =
-      searchParams?.get("joinCode")?.trim().toUpperCase() ?? "";
-
-    if (!joinCodeFromInvite) {
-      return;
-    }
-
-    setInviteJoinCode(joinCodeFromInvite);
-    setInviteRoomName(
-      searchParams?.get("roomName")?.trim() ?? "Impostor Room",
-    );
-    setInviteInviterName(searchParams?.get("invitedBy")?.trim() ?? "A friend");
-    setInvitePlayerName("");
-    setShowInviteModal(true);
-    setError(null);
-  }, [searchParams]);
-
   const joinRoom = async (payload: {
     roomId?: string;
     joinCode?: string;
@@ -220,7 +213,7 @@ export function JoinClient() {
 
   const joinInviteRoom = async () => {
     await joinRoom({
-      joinCode: inviteJoinCode,
+      joinCode: inviteDetails.joinCode,
       playerName: invitePlayerName,
     });
   };
@@ -779,10 +772,10 @@ export function JoinClient() {
                   Invite Received
                 </p>
                 <h2 className="text-3xl font-black leading-tight text-slate-950 dark:text-slate-50">
-                  {inviteInviterName} invited you to Join
+                  {inviteDetails.inviterName} invited you to Join
                 </h2>
                 <p className="text-lg font-semibold text-slate-700 dark:text-slate-300">
-                  {inviteRoomName}
+                  {inviteDetails.roomName}
                 </p>
               </div>
 
