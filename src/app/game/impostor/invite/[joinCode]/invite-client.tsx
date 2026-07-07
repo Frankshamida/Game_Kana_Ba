@@ -2,11 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-<<<<<<< Updated upstream
-import { ArrowRight, Loader2, Sparkles } from "lucide-react";
-=======
 import { ArrowRight, Crown, Loader2, Sparkles, Users } from "lucide-react";
->>>>>>> Stashed changes
 import { AnimatedBackground } from "@/components/game/animated-background";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -20,26 +16,20 @@ type InviteClientProps = {
   joinCode: string;
   roomName: string;
   invitedBy: string;
-<<<<<<< Updated upstream
-=======
   playerCount: number;
   maxPlayers: number;
   isPublic: boolean;
   isJoinable: boolean;
->>>>>>> Stashed changes
 };
 
 export function InviteClient({
   joinCode,
   roomName,
   invitedBy,
-<<<<<<< Updated upstream
-=======
   playerCount,
   maxPlayers,
   isPublic,
   isJoinable,
->>>>>>> Stashed changes
 }: InviteClientProps) {
   const router = useRouter();
   const [playerName, setPlayerName] = useState("");
@@ -97,8 +87,6 @@ export function InviteClient({
     }
   };
 
-<<<<<<< Updated upstream
-=======
   if (!isJoinable) {
     return (
       <main className="relative min-h-screen overflow-hidden px-4 py-8">
@@ -161,7 +149,6 @@ export function InviteClient({
     );
   }
 
->>>>>>> Stashed changes
   return (
     <main className="relative min-h-screen overflow-hidden px-4 py-8">
       <AnimatedBackground />
@@ -175,16 +162,6 @@ export function InviteClient({
               </div>
               <div className="relative flex h-full flex-col justify-between gap-10">
                 <div>
-<<<<<<< Updated upstream
-                  <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-100/90">
-                    Game Invite
-                  </p>
-                  <h1 className="mt-3 font-display text-4xl font-black leading-tight md:text-5xl">
-                    {invitedBy} invited you to join
-                  </h1>
-                  <p className="mt-3 text-lg font-semibold text-cyan-50/90">
-                    {roomName}
-=======
                   <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.22em] text-cyan-100">
                     <Sparkles className="h-4 w-4" /> Game Invite
                   </div>
@@ -193,30 +170,20 @@ export function InviteClient({
                   </h1>
                   <p className="mt-3 max-w-xl text-lg font-semibold text-cyan-50/90">
                     {invitedBy} invited you to play Impostor.
->>>>>>> Stashed changes
                   </p>
                 </div>
 
                 <div className="rounded-3xl border border-white/20 bg-white/10 p-5 shadow-[0_18px_50px_rgba(2,6,23,0.28)] backdrop-blur">
                   <div className="flex items-center gap-3">
                     <div className="rounded-2xl bg-white/15 p-3">
-<<<<<<< Updated upstream
-                      <Sparkles className="h-6 w-6" />
-=======
                       <Crown className="h-6 w-6" />
->>>>>>> Stashed changes
                     </div>
                     <div>
                       <p className="text-sm font-bold uppercase tracking-[0.18em] text-cyan-100/80">
                         Ready to play
                       </p>
                       <p className="mt-1 text-sm text-cyan-50/85">
-<<<<<<< Updated upstream
-                        Enter your name and the room will take you straight into
-                        the game.
-=======
                         Enter your name and jump into the match instantly.
->>>>>>> Stashed changes
                       </p>
                     </div>
                   </div>
@@ -239,8 +206,6 @@ export function InviteClient({
                   </p>
                 </div>
 
-<<<<<<< Updated upstream
-=======
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70">
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
@@ -285,7 +250,6 @@ export function InviteClient({
                   </div>
                 </div>
 
->>>>>>> Stashed changes
                 <div>
                   <label className="text-sm font-semibold">Your name</label>
                   <Input
@@ -328,11 +292,7 @@ export function InviteClient({
                     variant="secondary"
                     onClick={() => router.push("/game/impostor/join")}
                   >
-<<<<<<< Updated upstream
-                    Back
-=======
                     Return Home
->>>>>>> Stashed changes
                   </Button>
                 </div>
               </div>
