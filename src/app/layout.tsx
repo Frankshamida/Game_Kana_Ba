@@ -1,11 +1,27 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { MobileNavbar } from "@/components/ui/mobile-navbar";
+import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
-  title: "GatherUp",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "GatherUp",
+    template: "%s | GatherUp",
+  },
   description: "Play. Laugh. Connect.",
+  openGraph: {
+    type: "website",
+    siteName: "GatherUp",
+    images: ["/og-impostor-invite.svg"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-impostor-invite.svg"],
+  },
 };
 
 export default function RootLayout({
