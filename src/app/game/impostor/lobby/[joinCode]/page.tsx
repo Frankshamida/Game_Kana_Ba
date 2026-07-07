@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Check, Copy, Loader2, Radio, Users } from "lucide-react";
+import { Check, Copy, Link2, Loader2, Radio, Users } from "lucide-react";
 import { AnimatedBackground } from "@/components/game/animated-background";
 import { ExitGameModal } from "@/components/game/exit-game-modal";
 import { Button } from "@/components/ui/button";
@@ -77,6 +77,7 @@ export default function ImpostorLobbyPage() {
     (player) => player.readyForNextRound,
   ).length;
   const allReady = players.length > 0 && readyCount === players.length;
+  const inviteLabel = currentPlayer?.playerName ?? "A friend";
 
   const refreshRoom = async () => {
     const response = await fetch(`/api/impostor/rooms/${joinCode}`, {
@@ -218,7 +219,9 @@ export default function ImpostorLobbyPage() {
     }
   };
 
-  const copyCode = async () => {
+  const copyInviteLink = async () => {
+    if (!room || typeof window === "undefined") return;
+
     try {
       const inviteUrl = new URL(
         `/game/impostor/invite/${joinCode}`,
@@ -290,8 +293,8 @@ export default function ImpostorLobbyPage() {
     <main className="relative min-h-screen overflow-hidden px-4 py-8">
       <AnimatedBackground />
       <div className="container mx-auto max-w-3xl">
-        <Card className="space-y-5">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <Card className="space-y-5 border-white/80 bg-white/80 shadow-[0_24px_80px_rgba(15,23,42,0.10)] backdrop-blur dark:border-slate-700/80 dark:bg-slate-950/70">
+          <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(16rem,18rem)]">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
                 Remote Lobby
@@ -315,19 +318,44 @@ export default function ImpostorLobbyPage() {
                 Players: {players.length}/{room?.maxPlayers ?? 20}
               </p>
             </div>
-            {!room?.isPublic && (
-              <Button type="button" variant="secondary" onClick={copyCode}>
+            <div className="rounded-2xl border border-cyan-200/80 bg-gradient-to-br from-cyan-50 via-white to-blue-50 p-4 shadow-[0_14px_30px_rgba(8,145,178,0.12)] dark:border-cyan-900/40 dark:from-cyan-950/45 dark:via-slate-950 dark:to-blue-950/45">
+              <div className="flex items-start gap-3">
+                <div className="rounded-xl bg-cyan-500/10 p-2 text-cyan-700 dark:bg-cyan-400/15 dark:text-cyan-200">
+                  <Link2 className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-800 dark:text-cyan-200">
+                    Invite Players
+                  </p>
+                  <p className="mt-2 text-sm text-slate-700 dark:text-slate-300">
+                    Share a link that opens the join screen with the room name
+                    ready to go.
+                  </p>
+                </div>
+              </div>
+              <Button
+                type="button"
+                size="lg"
+                className="mt-4 w-full shadow-[0_12px_28px_rgba(14,165,233,0.28)]"
+                onClick={() => void copyInviteLink()}
+                disabled={!room}
+              >
                 {copied ? (
                   <>
-                    <Check className="mr-2 h-4 w-4" /> Copied!
+                    <Check className="mr-2 h-4 w-4" /> Invite Link Copied
                   </>
                 ) : (
                   <>
-                    <Copy className="mr-2 h-4 w-4" /> Copy Code
+                    <Copy className="mr-2 h-4 w-4" /> Copy Invite Link
                   </>
                 )}
               </Button>
-            )}
+              <p className="mt-3 text-xs font-medium text-slate-500 dark:text-slate-400">
+                {room?.isPublic
+                  ? "Public rooms still use the invite link so guests land in the right place."
+                  : "Private rooms need the invite link so guests can join with the code automatically."}
+              </p>
+            </div>
           </div>
 
           {loading ? (

@@ -1,0 +1,49 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="40" x2="1080" y2="590" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#052B59" />
+      <stop offset="0.52" stop-color="#0B74B8" />
+      <stop offset="1" stop-color="#0EA5E9" />
+    </linearGradient>
+    <linearGradient id="panel" x1="180" y1="120" x2="650" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A" stop-opacity="0.92" />
+      <stop offset="1" stop-color="#111827" stop-opacity="0.82" />
+    </linearGradient>
+    <linearGradient id="highlight" x1="730" y1="160" x2="1030" y2="480" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E0F2FE" stop-opacity="0.95" />
+      <stop offset="1" stop-color="#7DD3FC" stop-opacity="0.1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="42" fill="url(#bg)" />
+  <circle cx="145" cy="104" r="126" fill="#FFFFFF" fill-opacity="0.11" />
+  <circle cx="1040" cy="532" r="168" fill="#38BDF8" fill-opacity="0.12" />
+  <circle cx="930" cy="120" r="72" fill="#BAE6FD" fill-opacity="0.16" />
+
+  <g opacity="0.22">
+    <path d="M110 500C200 446 301 424 405 421C507 418 617 442 721 496" stroke="white" stroke-width="3" stroke-linecap="round" />
+    <path d="M162 544C245 502 343 480 441 478C540 475 643 493 747 533" stroke="white" stroke-width="2" stroke-linecap="round" />
+  </g>
+
+  <rect x="84" y="90" width="590" height="450" rx="34" fill="url(#panel)" stroke="white" stroke-opacity="0.14" />
+
+  <rect x="124" y="130" width="138" height="38" rx="19" fill="#E0F2FE" fill-opacity="0.12" />
+  <text x="154" y="155" fill="#BAE6FD" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="2">GATHERUP</text>
+
+  <text x="124" y="240" fill="white" font-family="Inter, Arial, sans-serif" font-size="52" font-weight="800">You're invited</text>
+  <text x="124" y="300" fill="white" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="700">to join the room</text>
+  <text x="124" y="364" fill="#BAE6FD" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700">Impostor</text>
+  <text x="124" y="406" fill="#E2E8F0" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="500">Enter your name and jump into the match.</text>
+
+  <rect x="124" y="450" width="320" height="68" rx="18" fill="#0EA5E9" />
+  <text x="164" y="492" fill="white" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700">Tap to join the game</text>
+
+  <path d="M742 144C879 118 1004 150 1080 220C1138 273 1138 367 1072 429C990 506 854 531 719 496C628 472 571 404 571 329C571 238 629 166 742 144Z" fill="url(#highlight)" />
+  <g transform="translate(748 176)">
+    <rect x="0" y="0" width="320" height="210" rx="28" fill="#0F172A" fill-opacity="0.5" stroke="white" stroke-opacity="0.16" />
+    <rect x="22" y="22" width="122" height="28" rx="14" fill="#22D3EE" fill-opacity="0.18" />
+    <rect x="22" y="66" width="160" height="20" rx="10" fill="#E2E8F0" fill-opacity="0.78" />
+    <rect x="22" y="98" width="208" height="20" rx="10" fill="#E2E8F0" fill-opacity="0.52" />
+    <rect x="22" y="138" width="276" height="44" rx="14" fill="#082F49" fill-opacity="0.75" stroke="#67E8F9" stroke-opacity="0.22" />
+    <text x="42" y="166" fill="#E0F2FE" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Game Room Preview</text>
+  </g>
+</svg>
