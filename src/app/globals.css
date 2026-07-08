@@ -69,6 +69,24 @@ body {
   @apply bg-slate-900/55 border-slate-700/60;
 }
 
+@media (max-width: 767px) {
+  body[data-mobile-top-chrome="closed"] .mobile-top-chrome {
+    display: none !important;
+  }
+
+  body[data-mobile-top-chrome="open"] .mobile-top-chrome {
+    display: inline-flex !important;
+  }
+
+  body[data-mobile-bottom-chrome="closed"] .mobile-bottom-chrome {
+    display: none !important;
+  }
+
+  body[data-mobile-bottom-chrome="open"] .mobile-bottom-chrome {
+    display: block !important;
+  }
+}
+
 .card3d {
   transform-style: preserve-3d;
   transition: transform 0.65s;

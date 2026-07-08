@@ -630,8 +630,8 @@ export default function RemoteImpostorPage() {
                   </Button>
                 ) : (
                   <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                    Wait for the host to open the voting once everyone has seen
-                    their role.
+                    className="mobile-top-chrome" Wait for the host to open the
+                    voting once everyone has seen their role.
                   </p>
                 )}
               </div>

@@ -26,7 +26,7 @@ export default function InviteNotFoundPage() {
           </div>
 
           <div className="flex justify-center gap-3">
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="mobile-top-chrome">
               <Link href="/game/impostor/join">
                 <ArrowLeft className="mr-2 h-4 w-4" /> Return Home
               </Link>

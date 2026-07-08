@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, Copy, Link2, Loader2, Radio, Users } from "lucide-react";
 import { AnimatedBackground } from "@/components/game/animated-background";
@@ -81,7 +81,7 @@ export function LobbyClient({ joinCode }: LobbyClientProps) {
   const allReady = players.length > 0 && readyCount === players.length;
   const inviteLabel = currentPlayer?.playerName ?? "A friend";
 
-  const refreshRoom = async () => {
+  const refreshRoom = useCallback(async () => {
     const response = await fetch(`/api/impostor/rooms/${joinCode}`, {
       cache: "no-store",
     });
@@ -95,7 +95,7 @@ export function LobbyClient({ joinCode }: LobbyClientProps) {
 
     setRoom(body.room as ImpostorRoom);
     setPlayers(body.players as ImpostorRoomPlayer[]);
-  };
+  }, [joinCode]);
 
   useEffect(() => {
     if (!playerToken) {
@@ -133,7 +133,7 @@ export function LobbyClient({ joinCode }: LobbyClientProps) {
     return () => {
       cancelled = true;
     };
-  }, [playerToken]);
+  }, [playerToken, refreshRoom, router]);
 
   useEffect(() => {
     if (!room) return;
@@ -186,7 +186,7 @@ export function LobbyClient({ joinCode }: LobbyClientProps) {
     return () => {
       void supabase.removeChannel(channel);
     };
-  }, [room]);
+  }, [refreshRoom, room]);
 
   const startRoom = async () => {
     setStarting(true);
@@ -326,7 +326,10 @@ export function LobbyClient({ joinCode }: LobbyClientProps) {
               We could not load this room.
             </p>
             <div className="flex justify-center gap-3 pt-2">
-              <Button onClick={() => router.push("/game/impostor/join")}>
+              <Button
+                className="mobile-top-chrome"
+                onClick={() => router.push("/game/impostor/join")}
+              >
                 Back to Join
               </Button>
             </div>

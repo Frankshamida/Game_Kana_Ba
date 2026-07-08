@@ -8,7 +8,7 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Play. Laugh. Connect.",
     start_url: "/",
     scope: "/",
-    display: "standalone",
+    display: "fullscreen",
     orientation: "portrait",
     background_color: "#07111f",
     theme_color: "#0ea5e9",

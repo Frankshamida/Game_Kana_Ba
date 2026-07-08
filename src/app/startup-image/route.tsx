@@ -25,16 +25,14 @@ export async function GET() {
           gap: 28,
         }}
       >
-        <img
-          src={logo.src}
-          alt="GatherUp"
-          width="260"
-          height="260"
+        <div
           style={{
             width: 260,
             height: 260,
-            objectFit: "cover",
             borderRadius: 48,
+            backgroundImage: `url(${logo.src})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
             boxShadow: "0 20px 60px rgba(2, 6, 23, 0.45)",
           }}
         />

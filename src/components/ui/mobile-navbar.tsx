@@ -192,7 +192,7 @@ export function MobileNavbar() {
   return (
     <>
       <nav
-        className="fixed inset-x-3 bottom-3 z-50 md:hidden"
+        className="mobile-bottom-chrome fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] z-50 md:hidden"
         aria-label="Mobile navigation"
       >
         <div className="relative rounded-2xl border border-slate-300/70 bg-white/92 px-2 pb-2 pt-3 shadow-2xl backdrop-blur-xl dark:border-slate-700/80 dark:bg-slate-950/94">

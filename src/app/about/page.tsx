@@ -49,7 +49,7 @@ export default function AboutPage() {
 
         <Link
           href="/"
-          className="mt-6 inline-flex items-center gap-2 rounded-xl border border-slate-300/80 bg-white/80 px-4 py-2 font-semibold text-slate-800 transition-colors hover:bg-white dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100"
+          className="mobile-top-chrome mt-6 inline-flex items-center gap-2 rounded-xl border border-slate-300/80 bg-white/80 px-4 py-2 font-semibold text-slate-800 transition-colors hover:bg-white dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100"
         >
           <ArrowLeft className="h-4 w-4" /> Back Home
         </Link>

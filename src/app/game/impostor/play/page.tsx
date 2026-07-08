@@ -325,6 +325,7 @@ export default function ImpostorPlayPage() {
           <Button
             size="default"
             variant="ghost"
+            className="mobile-top-chrome"
             onClick={() => requestExit("/")}
           >
             Back to Home
@@ -403,6 +404,7 @@ export default function ImpostorPlayPage() {
               <Button
                 size="lg"
                 variant="ghost"
+                className="mobile-top-chrome"
                 onClick={() => requestExit("/")}
               >
                 Back to Home
@@ -421,7 +423,6 @@ export default function ImpostorPlayPage() {
                 Tap a name to vote for the impostor.
               </p>
             </div>
-
             {!votingComplete && currentVoter && (
               <div className="rounded-2xl border border-white/70 bg-white/75 p-4 text-center dark:border-slate-700/80 dark:bg-slate-900/75">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
@@ -430,7 +431,6 @@ export default function ImpostorPlayPage() {
                 <p className="mt-2 text-2xl font-black">{currentVoter.name}</p>
               </div>
             )}
-
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               {game.players.map((player) => (
                 <Button
@@ -449,11 +449,10 @@ export default function ImpostorPlayPage() {
                 </Button>
               ))}
             </div>
-
+            className="mobile-top-chrome"
             <p className="text-sm text-muted-foreground">
               Votes submitted: {totalVotesCast}/{totalVoters}
             </p>
-
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button
                 size="lg"

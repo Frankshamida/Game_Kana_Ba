@@ -267,7 +267,12 @@ export default function SpiritualTalkPlayPage() {
             >
               <RotateCcw className="mr-2 h-5 w-5" /> Back to Setup
             </Button>
-            <Button size="lg" variant="ghost" onClick={() => requestExit("/")}>
+            <Button
+              size="lg"
+              variant="ghost"
+              className="mobile-top-chrome"
+              onClick={() => requestExit("/")}
+            >
               Back to Home
             </Button>
           </div>

@@ -249,6 +249,7 @@ export default function TruthOrDarePlayPage() {
             </Button>
             <Button
               size="lg"
+              className="mobile-top-chrome"
               onClick={() => submitChallengeResult(true)}
               disabled={!game.currentChallenge || loadingChallenge}
             >

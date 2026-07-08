@@ -495,6 +495,7 @@ export function JoinClient() {
               type="button"
               size="lg"
               variant="ghost"
+              className="mobile-top-chrome"
               onClick={() => router.push("/")}
             >
               <ArrowLeft className="mr-2 h-4 w-4" /> Back Home

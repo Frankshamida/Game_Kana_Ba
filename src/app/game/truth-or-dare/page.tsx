@@ -152,6 +152,7 @@ export default function TruthOrDareSetupPage() {
               type="button"
               size="xl"
               variant="ghost"
+              className="mobile-top-chrome"
               onClick={() => router.push("/")}
             >
               Back Home

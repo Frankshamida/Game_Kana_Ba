@@ -326,7 +326,10 @@ export function LobbyClient({ joinCode }: LobbyClientProps) {
               We could not load this room.
             </p>
             <div className="flex justify-center gap-3 pt-2">
-              <Button onClick={() => router.push("/game/impostor/join")}>
+              <Button
+                className="mobile-top-chrome"
+                onClick={() => router.push("/game/impostor/join")}
+              >
                 Back to Join
               </Button>
             </div>
