@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
-import { MobileChromeController } from "@/components/ui/mobile-chrome-controller";
 import { MobileNavbar } from "@/components/ui/mobile-navbar";
 import { getSiteUrl } from "@/lib/site-url";
 import logo from "./public/Logo/GatherUp.webp";
@@ -57,15 +56,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="flex min-h-[100dvh] flex-col overflow-x-hidden">
-        <Script id="mobile-chrome-init" strategy="beforeInteractive">
-          {`(() => {
-            try {
-              const isMobile = window.matchMedia("(max-width: 767px)").matches;
-              document.body.dataset.mobileTopChrome = isMobile ? "closed" : "open";
-              document.body.dataset.mobileBottomChrome = isMobile ? "closed" : "open";
-            } catch {}
-          })();`}
-        </Script>
         <Script id="theme-init" strategy="beforeInteractive">
           {`(() => {
             try {
@@ -76,14 +66,13 @@ export default function RootLayout({
             } catch {}
           })();`}
         </Script>
-        <MobileChromeController />
         <NetworkStatusModal />
         <InstallPrompt />
-        <div className="flex-1 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-[env(safe-area-inset-top)] md:pb-14">
+        <div className="flex-1 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-[env(safe-area-inset-top)] lg:pb-14">
           {children}
         </div>
         <MobileNavbar />
-        <footer className="fixed inset-x-0 bottom-0 z-40 hidden border-t border-white/40 bg-white/35 px-4 py-3 text-center text-xs text-slate-700 backdrop-blur-md dark:border-slate-700/70 dark:bg-slate-900/45 dark:text-slate-300 md:block">
+        <footer className="fixed inset-x-0 bottom-0 z-40 hidden border-t border-border/60 bg-background/60 px-4 py-3 text-center text-xs text-muted-foreground backdrop-blur-md lg:block">
           Copyright © {currentYear} Frank Gomes. All rights reserved.
         </footer>
       </body>

@@ -296,14 +296,14 @@ export function LobbyClient({ joinCode }: LobbyClientProps) {
     return (
       <main className="relative min-h-screen overflow-hidden px-4 py-8">
         <AnimatedBackground />
-        <div className="container mx-auto flex min-h-[calc(100vh-4rem)] max-w-5xl items-center justify-center">
+        <div className="container mx-auto flex min-h-[calc(100dvh-4rem)] max-w-5xl items-center justify-center">
           <Card className="w-full max-w-xl space-y-4 p-8 text-center shadow-[0_24px_80px_rgba(14,165,233,0.12)]">
-            <Loader2 className="mx-auto h-10 w-10 animate-spin text-cyan-600" />
+            <Loader2 className="mx-auto h-10 w-10 animate-spin text-primary" />
             <div>
               <h1 className="font-display text-3xl font-black">
                 Loading lobby
               </h1>
-              <p className="mt-2 text-slate-600 dark:text-slate-300">
+              <p className="mt-2 text-muted-foreground">
                 Connecting to room {joinCode}...
               </p>
             </div>
@@ -317,12 +317,12 @@ export function LobbyClient({ joinCode }: LobbyClientProps) {
     return (
       <main className="relative min-h-screen overflow-hidden px-4 py-8">
         <AnimatedBackground />
-        <div className="container mx-auto flex min-h-[calc(100vh-4rem)] max-w-5xl items-center justify-center">
+        <div className="container mx-auto flex min-h-[calc(100dvh-4rem)] max-w-5xl items-center justify-center">
           <Card className="w-full max-w-xl space-y-4 p-8 text-center shadow-[0_24px_80px_rgba(14,165,233,0.12)]">
             <h1 className="font-display text-3xl font-black">
               Lobby unavailable
             </h1>
-            <p className="mt-2 text-slate-600 dark:text-slate-300">
+            <p className="mt-2 text-muted-foreground">
               We could not load this room.
             </p>
             <div className="flex justify-center gap-3 pt-2">
@@ -343,7 +343,7 @@ export function LobbyClient({ joinCode }: LobbyClientProps) {
     <main className="relative min-h-screen overflow-hidden px-4 py-8">
       <AnimatedBackground />
       <div className="container mx-auto max-w-5xl space-y-6">
-        <Card className="overflow-hidden border-white/70 bg-white/80 p-0 shadow-[0_24px_80px_rgba(8,145,178,0.18)] backdrop-blur dark:border-slate-700/80 dark:bg-slate-950/80">
+        <Card className="overflow-hidden p-0 shadow-[0_24px_80px_rgba(8,145,178,0.18)]">
           <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="space-y-6 bg-gradient-to-br from-cyan-600 via-sky-700 to-blue-950 p-6 text-white md:p-8">
               <div className="flex items-center justify-between gap-4">
@@ -425,30 +425,30 @@ export function LobbyClient({ joinCode }: LobbyClientProps) {
 
             <div className="space-y-5 p-6 md:p-8">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-700 dark:text-cyan-300">
+                <p className="text-xs font-black uppercase tracking-[0.24em] text-primary">
                   Lobby Controls
                 </p>
-                <h2 className="mt-2 text-3xl font-black text-slate-950 dark:text-slate-50">
+                <h2 className="mt-2 text-3xl font-black text-foreground">
                   Players Ready To Start
                 </h2>
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                <p className="mt-2 text-sm text-muted-foreground">
                   {isHost
                     ? "You can start the room once everyone is ready."
                     : "Wait for the host to begin the round."}
                 </p>
               </div>
 
-              <div className="grid gap-3 rounded-3xl border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+              <div className="grid gap-3 rounded-3xl border border-border bg-muted/80 p-4">
                 {players.map((player) => (
                   <div
                     key={player.id}
-                    className="flex items-center justify-between rounded-2xl border border-white/70 bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-950/70"
+                    className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3 shadow-sm"
                   >
                     <div>
-                      <p className="font-bold text-slate-950 dark:text-slate-50">
+                      <p className="font-bold text-foreground">
                         {player.playerName}
                       </p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                      <p className="text-xs text-muted-foreground">
                         {player.isHost ? "Host" : "Player"}
                       </p>
                     </div>

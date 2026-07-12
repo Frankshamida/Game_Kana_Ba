@@ -424,7 +424,7 @@ export default function ImpostorPlayPage() {
               </p>
             </div>
             {!votingComplete && currentVoter && (
-              <div className="rounded-2xl border border-white/70 bg-white/75 p-4 text-center dark:border-slate-700/80 dark:bg-slate-900/75">
+              <div className="rounded-2xl border border-border bg-card/75 p-4 text-center">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                   Current Voter
                 </p>
@@ -443,7 +443,7 @@ export default function ImpostorPlayPage() {
                   disabled={!currentVoter || votingComplete}
                 >
                   <span>{player.name}</span>
-                  <span className="rounded-md bg-sky-500/20 px-2 py-1 text-xs font-extrabold text-sky-700 dark:text-sky-200">
+                  <span className="rounded-md bg-primary/10 px-2 py-1 text-xs font-extrabold text-primary">
                     {voteCounts[player.name] ?? 0}
                   </span>
                 </Button>
@@ -481,9 +481,9 @@ export default function ImpostorPlayPage() {
               <h2 className="mt-2 font-display text-4xl font-extrabold">
                 Reveal Results
               </h2>
-              <p className="mt-2 text-base text-slate-700 dark:text-slate-200">
+              <p className="mt-2 text-base text-foreground">
                 {impostors.length > 1 ? "Impostors" : "Impostor"}:{" "}
-                <span className="font-bold text-slate-900 dark:text-white">
+                <span className="font-bold text-foreground">
                   {impostors.length > 0
                     ? impostors.map((player) => player.name).join(", ")
                     : "Unknown"}
@@ -491,7 +491,7 @@ export default function ImpostorPlayPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-white/70 bg-white/75 p-4 dark:border-slate-700/80 dark:bg-slate-900/75">
+            <div className="rounded-2xl border border-border bg-card/75 p-4">
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Voting Outcome
               </p>
@@ -510,7 +510,7 @@ export default function ImpostorPlayPage() {
                   gained +1 point.
                 </p>
               )}
-              <p className="mt-2 text-sm text-slate-700 dark:text-slate-200">
+              <p className="mt-2 text-sm text-foreground">
                 Top vote:{" "}
                 {topVotedPlayers.length > 0
                   ? topVotedPlayers.join(", ")
@@ -520,13 +520,13 @@ export default function ImpostorPlayPage() {
             </div>
 
             <div className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl border border-white/70 bg-white/75 p-3 dark:border-slate-700/80 dark:bg-slate-900/75">
+              <div className="rounded-2xl border border-border bg-card/75 p-3">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Language
                 </p>
                 <p className="mt-1 text-lg font-extrabold">{game.language}</p>
               </div>
-              <div className="rounded-2xl border border-white/70 bg-white/75 p-3 dark:border-slate-700/80 dark:bg-slate-900/75">
+              <div className="rounded-2xl border border-border bg-card/75 p-3">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Impostor Count
                 </p>
@@ -534,32 +534,32 @@ export default function ImpostorPlayPage() {
                   {game.settings.impostorCount}
                 </p>
               </div>
-              <div className="rounded-2xl border border-white/70 bg-white/75 p-3 dark:border-slate-700/80 dark:bg-slate-900/75">
+              <div className="rounded-2xl border border-border bg-card/75 p-3">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Difficulty
                 </p>
                 <p className="mt-1 flex items-center gap-2 text-lg font-extrabold capitalize">
-                  <Sparkles className="h-4 w-4 text-sky-500" />
+                  <Sparkles className="h-4 w-4 text-primary" />
                   {game.settings.hintDifficulty}
                 </p>
               </div>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl border border-white/70 bg-white/75 p-4 dark:border-slate-700/80 dark:bg-slate-900/75">
+              <div className="rounded-2xl border border-border bg-card/75 p-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Secret Word
                 </p>
-                <p className="mt-2 text-xl font-black text-slate-900 dark:text-slate-100">
+                <p className="mt-2 text-xl font-black text-foreground">
                   {game.secretWord}
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-white/70 bg-white/75 p-4 dark:border-slate-700/80 dark:bg-slate-900/75">
+              <div className="rounded-2xl border border-border bg-card/75 p-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Hint
                 </p>
-                <p className="mt-2 text-base font-semibold text-slate-700 dark:text-slate-200">
+                <p className="mt-2 text-base font-semibold text-foreground">
                   {game.settings.hideHint
                     ? "Hint was hidden in this round."
                     : game.hint}
@@ -573,15 +573,15 @@ export default function ImpostorPlayPage() {
               </p>
             )}
 
-            <div className="rounded-2xl border border-white/70 bg-white/75 p-4 dark:border-slate-700/80 dark:bg-slate-900/75">
-              <p className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">
+            <div className="rounded-2xl border border-border bg-card/75 p-4">
+              <p className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-foreground">
                 <Users className="h-4 w-4" /> Players
               </p>
               <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {game.players.map((player) => (
                   <li
                     key={player.name}
-                    className="flex items-center justify-between rounded-xl border border-white/75 bg-white/80 px-3 py-2 text-sm font-semibold text-slate-900 dark:border-slate-700/80 dark:bg-slate-950/65 dark:text-slate-100"
+                    className="flex items-center justify-between rounded-xl border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground"
                   >
                     <div className="flex items-center gap-2">
                       <span>{player.name}</span>

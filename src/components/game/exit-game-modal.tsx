@@ -32,7 +32,7 @@ export function ExitGameModal({
           <AlertTriangle className="h-4 w-4" /> Confirm Exit
         </p>
         <h2 className="text-2xl font-black">{title}</h2>
-        <p className="text-sm text-slate-700 dark:text-slate-200">
+        <p className="text-sm text-foreground">
           {description}
         </p>
         <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">

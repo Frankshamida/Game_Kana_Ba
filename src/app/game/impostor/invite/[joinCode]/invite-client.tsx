@@ -91,8 +91,8 @@ export function InviteClient({
     return (
       <main className="relative min-h-screen overflow-hidden px-4 py-8">
         <AnimatedBackground />
-        <div className="container mx-auto flex min-h-[calc(100vh-4rem)] max-w-3xl items-center justify-center">
-          <Card className="w-full max-w-xl space-y-5 border-white/80 bg-white/85 p-8 text-center shadow-[0_28px_90px_rgba(15,23,42,0.18)] backdrop-blur dark:border-slate-700/80 dark:bg-slate-950/75">
+        <div className="container mx-auto flex min-h-[calc(100dvh-4rem)] max-w-3xl items-center justify-center">
+          <Card className="w-full max-w-xl space-y-5 p-8 text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-500/10 text-red-700 dark:text-red-300">
               <Crown className="h-8 w-8" />
             </div>
@@ -100,36 +100,36 @@ export function InviteClient({
               <p className="text-xs font-black uppercase tracking-[0.24em] text-red-700 dark:text-red-300">
                 Room Expired
               </p>
-              <h1 className="font-display text-4xl font-black text-slate-950 dark:text-slate-50">
+              <h1 className="font-display text-4xl font-black text-foreground">
                 {roomName}
               </h1>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-muted-foreground">
                 This game room is no longer joinable.
               </p>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+              <div className="rounded-2xl border border-border bg-muted p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
                   Players
                 </p>
-                <p className="mt-1 text-lg font-black text-slate-950 dark:text-slate-50">
+                <p className="mt-1 text-lg font-black text-foreground">
                   {playerCount}/{maxPlayers}
                 </p>
               </div>
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+              <div className="rounded-2xl border border-border bg-muted p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
                   Visibility
                 </p>
-                <p className="mt-1 text-lg font-black text-slate-950 dark:text-slate-50">
+                <p className="mt-1 text-lg font-black text-foreground">
                   {isPublic ? "Public" : "Private"}
                 </p>
               </div>
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+              <div className="rounded-2xl border border-border bg-muted p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
                   Join Code
                 </p>
-                <p className="mt-1 text-lg font-black text-slate-950 dark:text-slate-50">
+                <p className="mt-1 text-lg font-black text-foreground">
                   {joinCode}
                 </p>
               </div>
@@ -155,8 +155,8 @@ export function InviteClient({
   return (
     <main className="relative min-h-screen overflow-hidden px-4 py-8">
       <AnimatedBackground />
-      <div className="container mx-auto flex min-h-[calc(100vh-4rem)] max-w-3xl items-center justify-center">
-        <Card className="w-full overflow-hidden border-white/80 bg-white/85 p-0 shadow-[0_28px_90px_rgba(15,23,42,0.18)] backdrop-blur dark:border-slate-700/80 dark:bg-slate-950/75">
+      <div className="container mx-auto flex min-h-[calc(100dvh-4rem)] max-w-3xl items-center justify-center">
+        <Card className="w-full overflow-hidden p-0">
           <div className="grid gap-0 md:grid-cols-[1.05fr_0.95fr]">
             <div className="relative overflow-hidden bg-gradient-to-br from-cyan-700 via-sky-700 to-blue-950 p-8 text-white">
               <div className="absolute inset-0 opacity-30">
@@ -188,7 +188,7 @@ export function InviteClient({
                   <p className="text-[11px] font-black uppercase tracking-[0.22em] text-cyan-100/75">
                     Join Code
                   </p>
-                  <p className="mt-1 text-lg font-black text-slate-950 dark:text-slate-50">
+                  <p className="mt-1 text-lg font-black text-white">
                     {joinCode}
                   </p>
                 </div>
@@ -210,32 +210,32 @@ export function InviteClient({
             <div className="p-6 md:p-8">
               <div className="space-y-5">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-700 dark:text-cyan-300">
+                  <p className="text-xs font-black uppercase tracking-[0.24em] text-primary">
                     Join Now
                   </p>
-                  <h2 className="mt-2 text-3xl font-black text-slate-950 dark:text-slate-50">
+                  <h2 className="mt-2 text-3xl font-black text-foreground">
                     Choose your name
                   </h2>
-                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  <p className="mt-2 text-sm text-muted-foreground">
                     This keeps the invite clean and mobile-friendly while
                     showing the room name clearly.
                   </p>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70">
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                  <div className="rounded-2xl border border-border bg-muted p-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
                       Players
                     </p>
-                    <p className="mt-1 text-lg font-black text-slate-950 dark:text-slate-50">
+                    <p className="mt-1 text-lg font-black text-foreground">
                       {playerCount}/{maxPlayers}
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70">
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                  <div className="rounded-2xl border border-border bg-muted p-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
                       Visibility
                     </p>
-                    <p className="mt-1 text-lg font-black text-slate-950 dark:text-slate-50">
+                    <p className="mt-1 text-lg font-black text-foreground">
                       {isPublic ? "Public" : "Private"}
                     </p>
                   </div>

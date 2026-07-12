@@ -7,7 +7,7 @@ export default function GamesPage() {
       <AnimatedBackground />
       <div className="container mx-auto max-w-4xl">
         <section className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-700 dark:text-cyan-300">
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-primary">
             Games
           </p>
           <h1 className="mt-2 font-display text-5xl font-extrabold tracking-tight sm:text-6xl">

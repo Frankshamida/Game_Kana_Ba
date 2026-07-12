@@ -107,16 +107,16 @@ export default function SpiritualTalkSetupPage() {
             <PlayerListEditor players={players} onChange={setPlayers} />
           </div>
 
-          <div className="mt-5 rounded-2xl border border-white/60 bg-white/60 p-4 dark:border-slate-700/80 dark:bg-slate-900/70">
-            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+          <div className="glass mt-5 rounded-2xl p-4">
+            <p className="text-sm font-semibold text-foreground">
               Session focus
             </p>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+            <p className="mt-2 text-sm text-muted-foreground">
               Questions may cover prayer life, devotions, testimony moments,
               temptations, healing, gratitude, and relational spiritual growth.
             </p>
 
-            <p className="mt-4 text-sm font-semibold text-slate-900 dark:text-slate-100">
+            <p className="mt-4 text-sm font-semibold text-foreground">
               Question style
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -134,7 +134,7 @@ export default function SpiritualTalkSetupPage() {
                 </Button>
               ))}
             </div>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+            <p className="mt-2 text-sm text-muted-foreground">
               {
                 QUESTION_STYLES.find((style) => style.value === questionStyle)
                   ?.helper

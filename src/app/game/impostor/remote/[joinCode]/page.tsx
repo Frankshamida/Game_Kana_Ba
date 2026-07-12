@@ -563,14 +563,14 @@ export default function RemoteImpostorPage() {
                 <div
                   className={`card3d relative min-h-64 w-full ${roleCardFlipped ? "flipped" : ""}`}
                 >
-                  <div className="card3d-face absolute inset-0 rounded-3xl border border-white/70 bg-white/80 p-6 dark:border-slate-700/80 dark:bg-slate-900/80">
-                    <p className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.22em] text-sky-700 dark:text-sky-300">
+                  <div className="card3d-face absolute inset-0 rounded-3xl border border-border bg-card/80 p-6">
+                    <p className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.22em] text-primary">
                       <Eye className="h-4 w-4" /> Tap Card To Reveal
                     </p>
-                    <p className="mt-8 text-3xl font-black text-slate-900 dark:text-slate-100">
+                    <p className="mt-8 text-3xl font-black text-foreground">
                       Your Role Card
                     </p>
-                    <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
+                    <p className="mt-3 text-sm text-muted-foreground">
                       Tap once to reveal. Tap again to flip back.
                     </p>
                   </div>
@@ -588,10 +588,10 @@ export default function RemoteImpostorPage() {
                           <ShieldAlert className="h-4 w-4" /> You are the
                           Impostor
                         </p>
-                        <p className="mt-4 text-3xl font-black text-slate-900 dark:text-slate-100">
+                        <p className="mt-4 text-3xl font-black text-foreground">
                           Blend in and listen carefully.
                         </p>
-                        <p className="mt-3 text-base text-slate-700 dark:text-slate-200">
+                        <p className="mt-3 text-base text-foreground">
                           {room.settings.hideHint || !room.hint
                             ? "No hint was enabled for this round."
                             : `Hint: ${room.hint}`}
@@ -602,10 +602,10 @@ export default function RemoteImpostorPage() {
                         <p className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.22em] text-emerald-700 dark:text-emerald-200">
                           <Sparkles className="h-4 w-4" /> Your Secret Word
                         </p>
-                        <p className="mt-4 text-4xl font-black text-slate-900 dark:text-slate-100">
+                        <p className="mt-4 text-4xl font-black text-foreground">
                           {room.secretWord}
                         </p>
-                        <p className="mt-3 text-base text-slate-700 dark:text-slate-200">
+                        <p className="mt-3 text-base text-foreground">
                           Protect the word and find the impostor during
                           discussion.
                         </p>
@@ -615,8 +615,8 @@ export default function RemoteImpostorPage() {
                 </div>
               </button>
 
-              <div className="rounded-2xl border border-white/70 bg-white/75 p-4 text-left dark:border-slate-700/80 dark:bg-slate-900/75">
-                <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+              <div className="rounded-2xl border border-border bg-card/75 p-4 text-left">
+                <p className="text-sm font-semibold text-foreground">
                   Players ready: {seenCount}/{players.length}
                 </p>
                 {isHost ? (
@@ -629,7 +629,7 @@ export default function RemoteImpostorPage() {
                     {allSeen ? "Open Voting" : "Waiting For Everyone"}
                   </Button>
                 ) : (
-                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  <p className="mt-2 text-sm text-muted-foreground">
                     className="mobile-top-chrome" Wait for the host to open the
                     voting once everyone has seen their role.
                   </p>
@@ -640,14 +640,14 @@ export default function RemoteImpostorPage() {
 
           {room.phase === "voting" && (
             <div className="w-full space-y-4 text-left">
-              <div className="rounded-3xl border border-white/70 bg-white/80 p-6 dark:border-slate-700/80 dark:bg-slate-900/80">
-                <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-sky-700 dark:text-sky-300">
+              <div className="rounded-3xl border border-border bg-card/80 p-6">
+                <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-primary">
                   Realtime Voting
                 </p>
-                <p className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">
+                <p className="mt-3 text-lg font-semibold text-foreground">
                   Vote for the player you think is the impostor.
                 </p>
-                <p className="mt-4 text-sm text-slate-600 dark:text-slate-300">
+                <p className="mt-4 text-sm text-muted-foreground">
                   {currentPlayerHasVoted
                     ? "Your vote is submitted. Please wait for everyone to finish."
                     : "Voting is secret. Pick one player in the voting modal."}
@@ -664,18 +664,18 @@ export default function RemoteImpostorPage() {
 
           {room.phase === "results" && (
             <div className="w-full space-y-4 text-left">
-              <div className="rounded-3xl border border-white/70 bg-white/80 p-6 dark:border-slate-700/80 dark:bg-slate-900/80">
-                <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-sky-700 dark:text-sky-300">
+              <div className="rounded-3xl border border-border bg-card/80 p-6">
+                <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-primary">
                   Results Revealed
                 </p>
-                <p className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">
+                <p className="mt-3 text-lg font-semibold text-foreground">
                   Impostor{impostors.length > 1 ? "s" : ""}:{" "}
                   {impostors.map((player) => player.playerName).join(", ")}
                 </p>
-                <p className="mt-2 text-3xl font-black text-slate-900 dark:text-slate-100">
+                <p className="mt-2 text-3xl font-black text-foreground">
                   {impostors.map((player) => player.playerName).join(", ")}
                 </p>
-                <p className="mt-3 text-base text-slate-700 dark:text-slate-200">
+                <p className="mt-3 text-base text-foreground">
                   {currentPlayer?.isImpostor
                     ? "You were the impostor this round."
                     : currentPlayerCorrectGuess
@@ -686,11 +686,11 @@ export default function RemoteImpostorPage() {
                 </p>
               </div>
 
-              <div className="rounded-3xl border border-white/70 bg-white/80 p-6 dark:border-slate-700/80 dark:bg-slate-900/80">
+              <div className="rounded-3xl border border-border bg-card/80 p-6">
                 <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-emerald-700 dark:text-emerald-300">
                   Play Again
                 </p>
-                <p className="mt-3 text-base text-slate-700 dark:text-slate-200">
+                <p className="mt-3 text-base text-foreground">
                   {allReady
                     ? "Everyone is ready. The host can start the next round now."
                     : `Ready players: ${readyCount}/${players.length}. If someone goes back to the lobby, the next round will pause until they ready up again.`}
@@ -737,8 +737,8 @@ export default function RemoteImpostorPage() {
             </div>
           )}
 
-          <div className="rounded-2xl border border-white/70 bg-white/75 p-4 text-left dark:border-slate-700/80 dark:bg-slate-900/75">
-            <p className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">
+          <div className="rounded-2xl border border-border bg-card/75 p-4 text-left">
+            <p className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-foreground">
               <Medal className="h-4 w-4" /> Score Ranking
             </p>
             <ul className="grid gap-2 sm:grid-cols-2">
@@ -748,10 +748,10 @@ export default function RemoteImpostorPage() {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25, delay: index * 0.05 }}
-                  className="flex items-center justify-between rounded-xl border border-white/75 bg-white/80 px-3 py-2 text-sm font-semibold text-slate-900 dark:border-slate-700/80 dark:bg-slate-950/65 dark:text-slate-100"
+                  className="flex items-center justify-between rounded-xl border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground"
                 >
                   <span className="flex items-center gap-2">
-                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-200 text-xs font-black text-slate-800 dark:bg-slate-700 dark:text-slate-100">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-muted text-xs font-black text-foreground">
                       {index + 1}
                     </span>
                     {index === 0
@@ -802,13 +802,13 @@ export default function RemoteImpostorPage() {
       {room.phase === "voting" && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4">
           <Card className="w-full max-w-lg space-y-4">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-sky-700 dark:text-sky-300">
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-primary">
               Secret Vote
             </p>
             <h2 className="text-2xl font-black">
               Choose who you think is the impostor
             </h2>
-            <p className="text-sm text-slate-700 dark:text-slate-300">
+            <p className="text-sm text-muted-foreground">
               {currentVoteTargetId
                 ? `Your choice: ${players.find((player) => player.id === currentVoteTargetId)?.playerName ?? "Selected player"}`
                 : "Pick one player. You cannot vote for yourself."}
@@ -875,7 +875,7 @@ export default function RemoteImpostorPage() {
                       ? "You have successfully caught the impostor!"
                       : "You did not catch the impostor this round."}
                 </h2>
-                <p className="mt-2 text-lg font-semibold text-slate-800 dark:text-slate-100">
+                <p className="mt-2 text-lg font-semibold text-foreground">
                   Impostor:{" "}
                   {impostors.map((player) => player.playerName).join(", ") ||
                     "Unknown"}
@@ -892,18 +892,18 @@ export default function RemoteImpostorPage() {
               </Button>
             </div>
 
-            <div className="rounded-2xl border border-white/70 bg-white/75 p-4 dark:border-slate-700/80 dark:bg-slate-900/75">
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-slate-700 dark:text-slate-200">
+            <div className="rounded-2xl border border-border bg-card/75 p-4">
+              <p className="text-sm font-bold uppercase tracking-[0.16em] text-foreground">
                 Who Caught The Impostor?
               </p>
               <ul className="mt-3 grid gap-2 sm:grid-cols-2">
                 {playerCatchStatuses.map((player) => (
                   <li
                     key={player.id}
-                    className="rounded-xl border border-white/75 bg-white/85 px-3 py-2 text-sm font-semibold text-slate-900 dark:border-slate-700/80 dark:bg-slate-950/65 dark:text-slate-100"
+                    className="rounded-xl border border-border bg-card/85 px-3 py-2 text-sm font-semibold text-foreground"
                   >
                     <span>{player.playerName}</span>
-                    <span className="ml-2 text-xs font-bold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300">
+                    <span className="ml-2 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
                       {player.isImpostor
                         ? "Impostor"
                         : player.guessedCorrectly
@@ -915,8 +915,8 @@ export default function RemoteImpostorPage() {
               </ul>
             </div>
 
-            <div className="rounded-2xl border border-white/70 bg-white/75 p-4 dark:border-slate-700/80 dark:bg-slate-900/75">
-              <p className="mb-3 text-sm font-bold uppercase tracking-[0.16em] text-slate-700 dark:text-slate-200">
+            <div className="rounded-2xl border border-border bg-card/75 p-4">
+              <p className="mb-3 text-sm font-bold uppercase tracking-[0.16em] text-foreground">
                 Rankings
               </p>
               <ul className="grid gap-2">
@@ -946,10 +946,10 @@ export default function RemoteImpostorPage() {
                           ease: "easeInOut",
                         },
                       }}
-                      className="flex items-center justify-between rounded-xl border border-white/75 bg-white/85 px-3 py-3 text-sm font-semibold text-slate-900 dark:border-slate-700/80 dark:bg-slate-950/65 dark:text-slate-100"
+                      className="flex items-center justify-between rounded-xl border border-border bg-card/85 px-3 py-3 text-sm font-semibold text-foreground"
                     >
                       <span className="flex items-center gap-2">
-                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-200 text-xs font-black text-slate-800 dark:bg-slate-700 dark:text-slate-100">
+                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-muted text-xs font-black text-foreground">
                           {index + 1}
                         </span>
                         {index === 0

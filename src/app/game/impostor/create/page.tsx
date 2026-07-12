@@ -91,7 +91,7 @@ export default function ImpostorCreatePage() {
       <div className="container mx-auto max-w-2xl">
         <Card className="space-y-5">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-700 dark:text-cyan-300">
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-primary">
               Create Game
             </p>
             <h1 className="mt-2 font-display text-4xl font-extrabold">
@@ -119,7 +119,7 @@ export default function ImpostorCreatePage() {
             />
           </div>
 
-          <div className="rounded-2xl bg-white/60 p-4 dark:bg-slate-900/55">
+          <div className="rounded-2xl bg-muted p-4">
             <p className="text-sm font-semibold">Max players in room</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {[4, 6, 8, 10, 12, 16, 20].map((count) => (
@@ -136,7 +136,7 @@ export default function ImpostorCreatePage() {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-white/60 p-4 dark:bg-slate-900/55">
+          <div className="rounded-2xl bg-muted p-4">
             <p className="text-sm font-semibold">Number of impostors</p>
             <div className="mt-3 flex gap-2">
               {[1, 2, 3].map((count) => (
@@ -153,7 +153,7 @@ export default function ImpostorCreatePage() {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-white/60 p-4 dark:bg-slate-900/55">
+          <div className="rounded-2xl bg-muted p-4">
             <label className="flex cursor-pointer items-center gap-3 text-sm font-semibold">
               <input
                 type="checkbox"

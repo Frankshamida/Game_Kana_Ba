@@ -190,20 +190,20 @@ export default function SpiritualTalkPlayPage() {
                 Reflection Swipe
               </h1>
             </div>
-            <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+            <p className="text-sm font-semibold text-muted-foreground">
               Swipe left if player passed, right if player shared
             </p>
           </div>
 
-          <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+          <p className="text-sm font-semibold text-muted-foreground">
             Style: <span className="capitalize">{session.questionStyle}</span>
           </p>
 
-          <div className="rounded-2xl border border-white/70 bg-white/75 p-4 dark:border-slate-700/80 dark:bg-slate-900/75">
+          <div className="glass rounded-2xl p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
               Sharing Person
             </p>
-            <p className="mt-2 text-3xl font-black text-slate-900 dark:text-slate-100">
+            <p className="mt-2 text-3xl font-black text-foreground">
               {currentPlayer}
             </p>
           </div>
@@ -215,7 +215,7 @@ export default function SpiritualTalkPlayPage() {
           )}
 
           {!session.currentPrompt || loadingPrompt ? (
-            <div className="rounded-2xl border border-white/70 bg-white/75 p-8 text-center dark:border-slate-700/80 dark:bg-slate-900/75">
+            <div className="glass rounded-2xl p-8 text-center">
               <p className="text-lg font-semibold">
                 Generating a spiritual reflection question...
               </p>
@@ -227,11 +227,11 @@ export default function SpiritualTalkPlayPage() {
               onDragEnd={onCardDragEnd}
               className="cursor-grab active:cursor-grabbing"
             >
-              <div className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl dark:border-slate-700/80 dark:bg-slate-900/80">
+              <div className="glass-raised rounded-3xl p-6">
                 <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-emerald-700 dark:text-emerald-300">
                   Spiritual Reflection
                 </p>
-                <p className="mt-4 text-2xl font-bold leading-relaxed text-slate-900 dark:text-slate-100">
+                <p className="mt-4 text-2xl font-bold leading-relaxed text-foreground">
                   {session.currentPrompt.question}
                 </p>
                 <p className="mt-4 text-sm text-muted-foreground">
@@ -286,7 +286,7 @@ export default function SpiritualTalkPlayPage() {
             {session.players.map((name) => (
               <li
                 key={name}
-                className="flex items-center justify-between rounded-xl border border-white/70 bg-white/75 px-3 py-2 font-semibold dark:border-slate-700/80 dark:bg-slate-900/75"
+                className="glass flex items-center justify-between rounded-xl px-3 py-2 font-semibold"
               >
                 <span>{name}</span>
                 <span className="rounded-md bg-emerald-100 px-2 py-1 text-xs font-extrabold text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-200">
@@ -308,10 +308,10 @@ export default function SpiritualTalkPlayPage() {
             {session.history.slice(0, 5).map((item, index) => (
               <li
                 key={`${item.playerName}-${index}`}
-                className="rounded-xl border border-white/70 bg-white/75 px-3 py-2 text-sm dark:border-slate-700/80 dark:bg-slate-900/75"
+                className="glass rounded-xl px-3 py-2 text-sm"
               >
                 <p className="font-semibold">{item.playerName}</p>
-                <p className="text-slate-700 dark:text-slate-200">
+                <p className="text-muted-foreground">
                   {item.question}
                 </p>
                 <p className="mt-1 font-semibold">

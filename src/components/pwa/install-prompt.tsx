@@ -12,6 +12,24 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
 }
 
+const SESSION_SEEN_KEY = "installPromptSeen";
+
+function wasSeenThisSession() {
+  try {
+    return window.sessionStorage.getItem(SESSION_SEEN_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function markSeenThisSession() {
+  try {
+    window.sessionStorage.setItem(SESSION_SEEN_KEY, "true");
+  } catch {
+    // Ignore storage failures (private browsing, etc.) — worst case it can show again.
+  }
+}
+
 export function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
@@ -35,10 +53,15 @@ export function InstallPrompt() {
   }, []);
 
   useEffect(() => {
+    if (wasSeenThisSession()) {
+      return;
+    }
+
     const handleBeforeInstallPrompt = (event: Event) => {
       event.preventDefault();
       setDeferredPrompt(event as BeforeInstallPromptEvent);
       setVisible(true);
+      markSeenThisSession();
     };
 
     const handleAppInstalled = () => {
@@ -58,6 +81,7 @@ export function InstallPrompt() {
 
     if (isIos && !isStandalone) {
       setVisible(true);
+      markSeenThisSession();
     }
 
     return () => {
@@ -91,9 +115,9 @@ export function InstallPrompt() {
 
   return (
     <div className="fixed inset-x-0 top-0 z-[60] flex justify-center px-4 pt-4">
-      <div className="w-full max-w-md rounded-3xl border border-cyan-200/70 bg-slate-950/95 p-4 text-white shadow-[0_24px_70px_rgba(2,6,23,0.45)] backdrop-blur-xl dark:border-cyan-500/20">
+      <div className="w-full max-w-md rounded-3xl border border-primary/20 bg-slate-950/95 p-4 text-white shadow-[0_24px_70px_rgba(2,6,23,0.45)] backdrop-blur-xl">
         <div className="flex items-start gap-3">
-          <div className="overflow-hidden rounded-2xl bg-white/10 p-1 ring-1 ring-cyan-300/20">
+          <div className="overflow-hidden rounded-2xl bg-white/10 p-1 ring-1 ring-primary/20">
             <Image
               src={logo}
               alt="GatherUp logo"
@@ -102,7 +126,7 @@ export function InstallPrompt() {
             />
           </div>
           <div className="flex-1 space-y-1">
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-200/90">
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-primary">
               Install GatherUp
             </p>
             <p className="text-sm text-slate-200/90">
@@ -124,7 +148,7 @@ export function InstallPrompt() {
         <div className="mt-4 flex gap-3">
           <Button
             type="button"
-            className="flex-1 bg-cyan-500 text-slate-950 hover:bg-cyan-400"
+            className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
             onClick={() => void installApp()}
             disabled={isIos && !deferredPrompt}
           >

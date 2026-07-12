@@ -3,14 +3,14 @@ import { ArrowLeft } from "lucide-react";
 
 export default function AboutPage() {
   return (
-    <main className="px-4 py-10 pb-36 sm:px-6 md:pb-12">
-      <section className="mx-auto max-w-3xl rounded-3xl border border-white/70 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-slate-700/80 dark:bg-slate-900/75">
-        <p className="text-xs font-black uppercase tracking-[0.2em] text-cyan-700 dark:text-cyan-300">
+    <main className="px-4 py-10 pb-36 sm:px-6 lg:pb-12">
+      <section className="mx-auto max-w-3xl rounded-3xl p-6 glass">
+        <p className="text-xs font-black uppercase tracking-[0.2em] text-primary">
           About
         </p>
         <h1 className="mt-2 text-4xl font-extrabold">🎉 About This Game</h1>
 
-        <div className="mt-5 rounded-2xl border border-white/80 bg-white/85 p-5 leading-relaxed text-slate-700 dark:border-slate-700/80 dark:bg-slate-950/45 dark:text-slate-200">
+        <div className="mt-5 rounded-2xl border border-border bg-card/60 p-5 leading-relaxed text-foreground">
           <p>
             This game was created by <strong>Frank Gomez</strong>, inspired by
             countless hangouts with his churchmates at{" "}
@@ -30,7 +30,7 @@ export default function AboutPage() {
             still lead to a lot of laughter, friendship, and faith.
           </p>
 
-          <div className="mt-5 rounded-xl border border-cyan-200/80 bg-cyan-50/80 p-4 text-cyan-900 dark:border-cyan-800/70 dark:bg-cyan-950/25 dark:text-cyan-100">
+          <div className="mt-5 rounded-xl border border-primary/20 bg-secondary p-4 text-secondary-foreground">
             <p className="text-sm font-black uppercase tracking-[0.16em]">
               New in GatherUp
             </p>
@@ -41,7 +41,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <p className="mt-4 font-semibold text-cyan-800 dark:text-cyan-200">
+          <p className="mt-4 font-semibold text-primary">
             So gather your friends, charge your phones, and let the games begin!
             🎮✨
           </p>
@@ -49,7 +49,7 @@ export default function AboutPage() {
 
         <Link
           href="/"
-          className="mobile-top-chrome mt-6 inline-flex items-center gap-2 rounded-xl border border-slate-300/80 bg-white/80 px-4 py-2 font-semibold text-slate-800 transition-colors hover:bg-white dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100"
+          className="mobile-top-chrome mt-6 inline-flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2 font-semibold text-foreground transition-colors hover:bg-card/80"
         >
           <ArrowLeft className="h-4 w-4" /> Back Home
         </Link>

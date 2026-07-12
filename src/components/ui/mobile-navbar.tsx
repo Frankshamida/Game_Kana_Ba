@@ -192,10 +192,10 @@ export function MobileNavbar() {
   return (
     <>
       <nav
-        className="mobile-bottom-chrome fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] z-50 md:hidden"
+        className="animate-fade-in fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] z-50 lg:hidden"
         aria-label="Mobile navigation"
       >
-        <div className="relative rounded-2xl border border-slate-300/70 bg-white/92 px-2 pb-2 pt-3 shadow-2xl backdrop-blur-xl dark:border-slate-700/80 dark:bg-slate-950/94">
+        <div className="glass relative rounded-2xl px-2 pb-2 pt-3">
           <ul className="grid grid-cols-5 items-end">
             {navItems.map((item, index) => {
               const Icon = item.icon;
@@ -209,7 +209,7 @@ export function MobileNavbar() {
                       href={item.href}
                       onClick={(event) => handleNavClick(event, item.href)}
                       aria-current={isActive ? "page" : undefined}
-                      className="-mt-8 flex h-16 w-16 flex-col items-center justify-center rounded-full border border-slate-500/80 bg-slate-900 text-slate-100 shadow-[0_10px_26px_rgba(0,0,0,0.45)] transition-transform duration-200 hover:scale-105 dark:border-slate-600 dark:bg-slate-900"
+                      className="-mt-8 flex h-16 w-16 flex-col items-center justify-center rounded-full bg-primary text-primary-foreground shadow-glow transition-transform duration-300 ease-smooth hover:scale-105 active:scale-90"
                     >
                       <Icon className="h-6 w-6" />
                       <span className="mt-1 text-[10px] font-semibold">
@@ -226,14 +226,14 @@ export function MobileNavbar() {
                     href={item.href}
                     onClick={(event) => handleNavClick(event, item.href)}
                     aria-current={isActive ? "page" : undefined}
-                    className={`group flex min-h-12 w-full flex-col items-center justify-center rounded-xl px-1 text-[11px] font-medium transition-all duration-200 ${
+                    className={`group flex min-h-12 w-full flex-col items-center justify-center rounded-xl px-1 text-[11px] font-medium transition-all duration-300 ease-smooth active:scale-90 ${
                       isActive
-                        ? "-translate-y-0.5 bg-cyan-100/80 text-cyan-900 dark:bg-slate-800/70 dark:text-white"
-                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/60 dark:hover:text-slate-100"
+                        ? "-translate-y-0.5 bg-primary/15 text-primary dark:bg-primary/20 dark:text-primary"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
                     }`}
                   >
                     <Icon
-                      className={`h-[18px] w-[18px] transition-transform duration-200 group-hover:-translate-y-0.5 ${
+                      className={`h-[18px] w-[18px] transition-transform duration-300 ease-smooth group-hover:-translate-y-0.5 ${
                         isActive ? "-translate-y-0.5" : ""
                       }`}
                     />

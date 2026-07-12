@@ -356,9 +356,9 @@ export function JoinClient() {
             </Button>
           </div>
 
-          <section className="rounded-2xl border border-white/70 bg-white/70 p-4 dark:border-slate-700/80 dark:bg-slate-900/70">
+          <section className="glass rounded-2xl p-4">
             <div className="mb-3 flex items-center justify-between">
-              <p className="text-sm font-bold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">
+              <p className="text-sm font-bold uppercase tracking-[0.18em] text-foreground">
                 Game Rooms
               </p>
               <Button
@@ -375,16 +375,16 @@ export function JoinClient() {
               </Button>
             </div>
 
-            <p className="text-sm text-slate-600 dark:text-slate-300">
+            <p className="text-sm text-muted-foreground">
               {roomCountLabel}
             </p>
 
             {loadingRooms ? (
-              <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
+              <p className="mt-3 text-sm text-muted-foreground">
                 Loading rooms...
               </p>
             ) : rooms.length === 0 ? (
-              <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
+              <p className="mt-3 text-sm text-muted-foreground">
                 No public rooms are open yet.
               </p>
             ) : (
@@ -401,7 +401,7 @@ export function JoinClient() {
                       className={`group relative overflow-hidden rounded-xl border p-3 shadow-[0_8px_24px_rgba(14,165,233,0.12)] transition dark:border-cyan-500/25 dark:from-slate-900/85 dark:via-slate-900/90 dark:to-blue-950/55 ${
                         isJoinable
                           ? "border-cyan-200/70 bg-gradient-to-br from-cyan-50/90 via-white/90 to-blue-50/90 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(14,165,233,0.2)]"
-                          : "border-slate-300/80 bg-slate-100/80 opacity-90"
+                          : "border-border bg-muted opacity-90"
                       }`}
                     >
                       <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100">
@@ -409,7 +409,7 @@ export function JoinClient() {
                       </div>
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div className="space-y-1.5">
-                          <p className="text-lg font-black text-slate-900 dark:text-slate-100">
+                          <p className="text-lg font-black text-foreground">
                             {item.room.roomName}
                           </p>
                           <div className="flex flex-wrap items-center gap-2">
@@ -425,7 +425,7 @@ export function JoinClient() {
                             >
                               {getRoomStatusLabel(item.room)}
                             </span>
-                            <span className="inline-flex items-center gap-1 rounded-full bg-slate-900/6 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-50/10 dark:text-slate-200">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
                               <User className="h-3.5 w-3.5" />
                               Host: {item.hostName}
                             </span>
@@ -435,7 +435,7 @@ export function JoinClient() {
                             </span>
                           </div>
                           <div className="pt-0.5">
-                            <div className="h-1.5 w-full rounded-full bg-slate-300/70 dark:bg-slate-700/80">
+                            <div className="h-1.5 w-full rounded-full bg-muted">
                               <div
                                 className="h-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
                                 style={{
@@ -585,7 +585,7 @@ export function JoinClient() {
             <Card className="w-full max-w-md space-y-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.22em] text-slate-700 dark:text-slate-200">
+                  <p className="text-xs font-black uppercase tracking-[0.22em] text-foreground">
                     Join Private Room
                   </p>
                   <h2 className="mt-1 text-2xl font-black">Enter Room Code</h2>
@@ -658,7 +658,7 @@ export function JoinClient() {
             <Card className="w-full max-w-xl space-y-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.22em] text-cyan-700 dark:text-cyan-300">
+                  <p className="text-xs font-black uppercase tracking-[0.22em] text-primary">
                     Create Room
                   </p>
                   <h2 className="mt-1 text-2xl font-black">New Online Room</h2>
@@ -737,7 +737,7 @@ export function JoinClient() {
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-white/60 p-4 dark:bg-slate-900/55">
+              <div className="rounded-2xl bg-muted p-4">
                 <label className="flex cursor-pointer items-center gap-3 text-sm font-semibold">
                   <input
                     type="checkbox"
@@ -800,15 +800,15 @@ export function JoinClient() {
 
         {showInviteModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-            <Card className="w-full max-w-md space-y-4 border-cyan-200/70 bg-white/95 shadow-[0_24px_72px_rgba(8,145,178,0.22)] dark:border-cyan-900/40 dark:bg-slate-950/92">
+            <Card className="glass w-full max-w-md space-y-4">
               <div className="space-y-2">
-                <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-700 dark:text-cyan-300">
+                <p className="text-xs font-black uppercase tracking-[0.24em] text-primary">
                   Invite Received
                 </p>
-                <h2 className="text-3xl font-black leading-tight text-slate-950 dark:text-slate-50">
+                <h2 className="text-3xl font-black leading-tight text-foreground">
                   {inviteDetails.inviterName} invited you to Join
                 </h2>
-                <p className="text-lg font-semibold text-slate-700 dark:text-slate-300">
+                <p className="text-lg font-semibold text-muted-foreground">
                   {inviteDetails.roomName}
                 </p>
               </div>

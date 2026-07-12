@@ -48,10 +48,13 @@
 body {
   @apply bg-background text-foreground font-body antialiased;
   min-height: 100vh;
+  min-height: 100dvh;
   background-image:
-    radial-gradient(circle at 15% 20%, rgba(255, 183, 77, 0.25), transparent 40%),
-    radial-gradient(circle at 85% 0%, rgba(0, 173, 239, 0.3), transparent 35%),
-    radial-gradient(circle at 50% 90%, rgba(67, 160, 71, 0.24), transparent 38%);
+    radial-gradient(circle at 15% 20%, rgba(255, 183, 77, 0.22), transparent 42%),
+    radial-gradient(circle at 85% 0%, rgba(0, 173, 239, 0.28), transparent 38%),
+    radial-gradient(circle at 50% 100%, rgba(67, 160, 71, 0.2), transparent 42%);
+  background-attachment: fixed;
+  transition: background-color 0.3s ease;
 }
 
 .dark body {
@@ -61,30 +64,41 @@ body {
     radial-gradient(circle at 45% 85%, rgba(67, 160, 71, 0.12), transparent 35%);
 }
 
+::selection {
+  @apply bg-primary/25 text-foreground;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-foreground/15 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-foreground/25;
+}
+
 .glass {
-  @apply bg-white/55 backdrop-blur-xl border border-white/60 shadow-lg;
+  @apply relative bg-white/60 backdrop-blur-xl border border-white/70 shadow-[0_1px_0_0_rgba(255,255,255,0.7)_inset,0_8px_30px_-8px_rgba(15,23,42,0.18)];
 }
 
 .dark .glass {
-  @apply bg-slate-900/55 border-slate-700/60;
+  @apply bg-slate-900/60 border-white/10 shadow-[0_1px_0_0_rgba(255,255,255,0.06)_inset,0_8px_30px_-8px_rgba(0,0,0,0.55)];
 }
 
-@media (max-width: 767px) {
-  body[data-mobile-top-chrome="closed"] .mobile-top-chrome {
-    display: none !important;
-  }
+.glass-raised {
+  @apply glass transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_1px_0_0_rgba(255,255,255,0.7)_inset,0_16px_40px_-12px_rgba(15,23,42,0.24)];
+}
 
-  body[data-mobile-top-chrome="open"] .mobile-top-chrome {
-    display: inline-flex !important;
-  }
-
-  body[data-mobile-bottom-chrome="closed"] .mobile-bottom-chrome {
-    display: none !important;
-  }
-
-  body[data-mobile-bottom-chrome="open"] .mobile-bottom-chrome {
-    display: block !important;
-  }
+.dark .glass-raised {
+  @apply hover:shadow-[0_1px_0_0_rgba(255,255,255,0.06)_inset,0_16px_40px_-12px_rgba(0,0,0,0.65)];
 }
 
 .card3d {

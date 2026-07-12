@@ -125,7 +125,7 @@ export default function ImpostorSetupPage() {
             />
           </div>
 
-          <div className="mt-5 rounded-2xl border border-white/70 bg-white/60 p-4 dark:border-slate-700/80 dark:bg-slate-900/70">
+          <div className="mt-5 rounded-2xl border border-border bg-muted p-4">
             <label className="flex cursor-pointer items-center gap-3 text-sm font-semibold">
               <input
                 type="checkbox"
@@ -140,7 +140,7 @@ export default function ImpostorSetupPage() {
             </p>
           </div>
 
-          <div className="mt-4 rounded-2xl border border-white/70 bg-white/60 p-4 dark:border-slate-700/80 dark:bg-slate-900/70">
+          <div className="mt-4 rounded-2xl border border-border bg-muted p-4">
             <p className="text-sm font-semibold">Number of impostors</p>
             <div className="mt-3 flex gap-2">
               {[1, 2, 3].map((count) => {
